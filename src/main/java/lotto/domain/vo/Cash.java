@@ -2,8 +2,8 @@ package lotto.domain.vo;
 
 import static lotto.exceptions.ErrorMessage.CASH_IS_NOT_DIVISIBLE;
 import static lotto.exceptions.ErrorMessage.CASH_IS_NOT_POSITIVE;
-import static lotto.utils.NumberConstants.LOTTO_PRICE;
-import static lotto.utils.NumberConstants.ZERO;
+import static lotto.domain.NumberConstants.LOTTO_PRICE;
+import static lotto.domain.NumberConstants.ZERO;
 
 public class Cash {
     private final int money;

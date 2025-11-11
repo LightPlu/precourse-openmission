@@ -1,6 +1,6 @@
 package lotto.view;
 
-import static lotto.utils.NumberConstants.PERCENTAGE;
+import static lotto.domain.NumberConstants.PERCENTAGE;
 
 public class ViewFormatter {
 
