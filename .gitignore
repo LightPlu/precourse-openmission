@@ -1,0 +1,13 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+build/
+
+# 로그 / 임시 파일
+*.log
+
+# OS / 환경별 파일
+.DS_Store
