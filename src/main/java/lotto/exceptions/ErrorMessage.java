@@ -6,7 +6,8 @@ public enum ErrorMessage {
     CASH_IS_NOT_DIVISIBLE("[ERROR] 구입 금액을 1,000원 단위로 입력해주세요."),
     CASH_IS_NOT_POSITIVE("[ERROR] 구입 금액을 0원보다 크게 입력해주세요."),
     LOTTO_NUMBER_IS_NOT_DUPLICATE("[ERROR] 로또 번호는 중복될 수 없습니다."),
-    INPUT_VALUE_IS_INVALID("[ERROR] 입력값이 유효하지 않습니다.");
+    INPUT_VALUE_IS_INVALID("[ERROR] 입력값이 유효하지 않습니다."),
+    CASH_RANGE_OUT("[ERROR] 구입 금액은 10만원을 넘을 수 없습니다.");
 
     private final String message;
 
