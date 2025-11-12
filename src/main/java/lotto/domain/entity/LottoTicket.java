@@ -4,15 +4,12 @@ import java.util.List;
 import lotto.domain.vo.Lotto;
 
 public class LottoTicket {
-    private final int round;
-    private final int id;
+
     private final List<Lotto> lottos;
     private static final int LOTTO_MAXIMUM_PURCHASE = 5;
 
-    public LottoTicket(int round, int id, List<Lotto> lottos) {
+    public LottoTicket(List<Lotto> lottos) {
         validateLottoPurchaseRange(lottos);
-        this.round = round;
-        this.id = id;
         this.lottos = lottos;
     }
 
@@ -22,8 +19,8 @@ public class LottoTicket {
         }
     }
 
-    public LottoTicket of(int round, int id, List<Lotto> lottos) {
-        return new LottoTicket(round, id, lottos);
+    public static LottoTicket of(List<Lotto> lottos) {
+        return new LottoTicket(lottos);
     }
 
 }

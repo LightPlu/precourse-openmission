@@ -9,15 +9,13 @@ import java.util.List;
 import lotto.domain.vo.LottoNumber;
 
 public class WinningLottoNumbers {
-    private final int round;
     private final List<LottoNumber> winningNumbers;
     private final LottoNumber bonusNumber;
 
-    public WinningLottoNumbers(int round, List<LottoNumber> winningNumbers, LottoNumber bonusNumber) {
+    public WinningLottoNumbers(List<LottoNumber> winningNumbers, LottoNumber bonusNumber) {
         validateBonusNumberRange(bonusNumber);
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
-        this.round = round;
         this.winningNumbers = winningNumbers;
         this.bonusNumber = bonusNumber;
     }

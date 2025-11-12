@@ -4,11 +4,9 @@ import java.util.List;
 import lotto.domain.vo.PrizeDetail;
 
 public class LottoResult {
-    private final int round;
     private final List<PrizeDetail> results;
 
-    public LottoResult(int round, List<PrizeDetail> results) {
-        this.round = round;
+    public LottoResult(List<PrizeDetail> results) {
         this.results = List.copyOf(results);
     }
 
