@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 import lotto.domain.entity.LottoResult;
 import lotto.domain.vo.Cash;
 import lotto.domain.vo.Rank;

@@ -1,8 +1,8 @@
 package lotto.controller;
 
 import java.util.List;
-import lotto.domain.entity.Lotto;
-import lotto.domain.vo.WinningLottoNumbers;
+import lotto.domain.vo.Lotto;
+import lotto.domain.entity.WinningLottoNumbers;
 import lotto.service.LottoServiceImpl;
 import lotto.view.UserInputView;
 import lotto.view.UserOutputView;

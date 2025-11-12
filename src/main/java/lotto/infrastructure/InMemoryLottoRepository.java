@@ -2,7 +2,7 @@ package lotto.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 import lotto.domain.repository.LottoRepository;
 
 public class InMemoryLottoRepository implements LottoRepository {

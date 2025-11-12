@@ -1,7 +1,7 @@
 package lotto.domain.repository;
 
 import java.util.List;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 
 public interface LottoRepository {
 

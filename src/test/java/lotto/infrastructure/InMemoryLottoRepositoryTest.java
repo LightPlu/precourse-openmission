@@ -3,7 +3,7 @@ package lotto.infrastructure;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 import lotto.domain.repository.LottoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

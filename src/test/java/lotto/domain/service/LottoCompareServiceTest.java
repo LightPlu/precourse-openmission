@@ -4,11 +4,10 @@ import static camp.nextstep.edu.missionutils.test.Assertions.assertRandomUniqueN
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.util.List;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 import lotto.domain.vo.Cash;
 import lotto.domain.vo.CountResult;
-import lotto.domain.vo.WinningLottoNumbers;
-import lotto.utils.RandomNumberGenerator;
+import lotto.domain.entity.WinningLottoNumbers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

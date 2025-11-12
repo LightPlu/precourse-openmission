@@ -1,21 +1,20 @@
 package lotto.service;
 
-import static lotto.utils.NumberConstants.LOTTO_PRICE;
+import static lotto.domain.NumberConstants.LOTTO_PRICE;
 
 import java.util.ArrayList;
 import java.util.List;
-import lotto.domain.entity.Lotto;
+import lotto.domain.vo.Lotto;
 import lotto.domain.entity.LottoResult;
 import lotto.domain.service.LottoAggregateService;
 import lotto.domain.service.LottoCompareService;
-import lotto.domain.service.LottoPrizeCalculateService;
 import lotto.domain.service.LottoPurchaseService;
 import lotto.domain.vo.Cash;
 import lotto.domain.vo.CountResult;
-import lotto.domain.vo.WinningLottoNumbers;
+import lotto.domain.entity.WinningLottoNumbers;
 import lotto.domain.repository.LottoRepository;
 import lotto.infrastructure.InMemoryLottoRepository;
-import lotto.utils.RandomNumberGenerator;
+import lotto.domain.service.RandomNumberGenerator;
 
 public class LottoServiceImpl implements LottoService {
 
