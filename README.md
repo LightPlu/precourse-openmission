@@ -60,6 +60,7 @@
 - 식별자로 인해 구분해야 하는 것(Entity)
   - LottoTicket(로또의 각 게임)
     - 각 게임에는 최소 1개, 최대 5개의 로또 추첨이 들어갈 수 있다
+    - 각 티켓별로 최종 당첨금을 계산하는 로직이 구현되어야 한다.
   - LottoResult(로또의 각 회차)
     - 각 회차별 등수마다 몇개의 당첨이 존재하고, 당첨금액은 얼마인지에 대해 표현한다.
   - WinningLottoNumbers(로또의 각 당첨번호)
@@ -85,3 +86,13 @@
 - Cash VO 내에 금액을 통하여 로또를 발행할 횟수를 저장하는 멤버변수 fullGameCount, remainingGameCount 멤버 변수를 따로 GameCount VO로 나누는 것이 맞을까?
   - 만약 GameCount를 통해서 다른 도메인 규칙이 생긴다면나누는게 맞다고 생각하지만, 현재 로또 규칙상 최대 금액 제한만 있으므로 굳이 나누지 않는다
   - Cash VO에서 최대 금액을 설정해두고 만약 최대 금액을 넘어선다면 에러를 발생하면 되기 때문이다
+
+
+- 현재 PrizeDetail 클래스와 Rank 클래스는 같은 역할을 하는 것 아닌가?
+  - 똑같이 Rank와 상금 및 갯수에 대해 다루고 있어서 혼동할 수 있다.
+  - PrizeDetail VO같은 경우 한 Ticket당 등수별 몇개의 당첨이 됐는지, Ticket에서의 총 상금은 어떻게 되는지에 대한 VO이다.
+
+
+- 현재 LottoResult Entity를 통해서 회차당 당첨된 내역들을 저장하려 했는데 현재 구현하는 도중 티켓별로 당첨 내역을 저장하기 위해 LottoResult를 사용했다. 어떻게 추후 구현을할까?
+  - 우선 생각을 해보면 티켓별 내역을 굳이 저장해야하나? 필요없다. Entity -> VO로 이동시키자. 그러면 어떻게 회차별로 저장을 하지? 저장할 때 그저 회차내 모든 LottoResult들을 다 조회해서 더해야하나? 그렇다기엔 LottoResult를 DB에 저장해두기엔 너무 많은 공간 낭비가 들어간다.
+  - LottoResult를 VO로 이동시키고, RoundResult를 Entity에 추가하여 당첨과 관련된 Aggregate Root로 만들자.
