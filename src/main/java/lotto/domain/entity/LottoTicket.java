@@ -23,4 +23,8 @@ public class LottoTicket {
         return new LottoTicket(lottos);
     }
 
+    public List<Lotto> getLottos() {
+        return List.copyOf(lottos);
+    }
+
 }
