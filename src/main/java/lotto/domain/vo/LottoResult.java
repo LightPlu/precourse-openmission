@@ -1,7 +1,6 @@
-package lotto.domain.entity;
+package lotto.domain.vo;
 
 import java.util.List;
-import lotto.domain.vo.PrizeDetail;
 
 public class LottoResult {
     private final List<PrizeDetail> results;
