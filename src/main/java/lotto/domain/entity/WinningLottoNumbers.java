@@ -6,24 +6,27 @@ import static lotto.utils.LottoNumberRange.MAX_LOTTO_NUMBER;
 import static lotto.utils.LottoNumberRange.MIN_LOTTO_NUMBER;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import lotto.domain.vo.LottoNumber;
 
 public class WinningLottoNumbers {
+    private final long id;
     private final long roundId;
     private final List<LottoNumber> winningNumbers;
     private final LottoNumber bonusNumber;
 
-    private WinningLottoNumbers(List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
+    private WinningLottoNumbers(long id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
         validateBonusNumberRange(bonusNumber);
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
+        this.id = id;
         this.winningNumbers = winningNumbers;
         this.bonusNumber = bonusNumber;
         this.roundId = roundId;
     }
 
-    public static WinningLottoNumbers of(List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
-        return new WinningLottoNumbers(winningNumbers, bonusNumber, roundId);
+    public static WinningLottoNumbers of(long id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
+        return new WinningLottoNumbers(id, winningNumbers, bonusNumber, roundId);
     }
 
     private void validateBonusNumberRange(LottoNumber bonusNumber) {
@@ -49,6 +52,14 @@ public class WinningLottoNumbers {
         });
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public long getRoundId() {
+        return roundId;
+    }
+
     public List<LottoNumber> getWinningNumbers() {
         return winningNumbers;
     }
@@ -56,5 +67,12 @@ public class WinningLottoNumbers {
     public LottoNumber getBonusNumber() {
         return bonusNumber;
     }
+
+    public String winningNumbersAsCsv() {
+        return winningNumbers.stream()
+                .map(n -> String.valueOf(n.getValue()))
+                .collect(Collectors.joining(","));
+    }
+
 
 }
