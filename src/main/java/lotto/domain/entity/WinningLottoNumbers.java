@@ -1,9 +1,9 @@
 package lotto.domain.entity;
 
+import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
+import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.exceptions.ErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 import static lotto.exceptions.ErrorMessage.WINNING_NUMBER_DUPLICATE_BONUS_NUMBER;
-import static lotto.utils.LottoNumberRange.MAX_LOTTO_NUMBER;
-import static lotto.utils.LottoNumberRange.MIN_LOTTO_NUMBER;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,15 +30,15 @@ public class WinningLottoNumbers {
     }
 
     private void validateBonusNumberRange(LottoNumber bonusNumber) {
-        if (bonusNumber.getValue() < MIN_LOTTO_NUMBER.getNumber()
-                || bonusNumber.getValue() > MAX_LOTTO_NUMBER.getNumber()) {
+        if (bonusNumber.getValue() < LOTTO_START_NUMBER.getValue()
+                || bonusNumber.getValue() > LOTTO_END_NUMBER.getValue()) {
             throw new IllegalArgumentException(LOTTO_NUMBER_OUT_OF_BOUNDS.getMessage());
         }
     }
 
     private void validateWinningNumbersRange(List<LottoNumber> winningNumbers) {
         winningNumbers.forEach(number -> {
-            if (number.getValue() < MIN_LOTTO_NUMBER.getNumber() || number.getValue() > MAX_LOTTO_NUMBER.getNumber()) {
+            if (number.getValue() < LOTTO_START_NUMBER.getValue() || number.getValue() > LOTTO_END_NUMBER.getValue()) {
                 throw new IllegalArgumentException(LOTTO_NUMBER_OUT_OF_BOUNDS.getMessage());
             }
         });

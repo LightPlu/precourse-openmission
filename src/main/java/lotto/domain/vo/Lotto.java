@@ -1,9 +1,9 @@
 package lotto.domain.vo;
 
+import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
+import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 import static lotto.exceptions.ErrorMessage.LOTTO_NUMBER_IS_NOT_DUPLICATE;
 import static lotto.exceptions.ErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
-import static lotto.utils.LottoNumberRange.MAX_LOTTO_NUMBER;
-import static lotto.utils.LottoNumberRange.MIN_LOTTO_NUMBER;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +32,7 @@ public class Lotto {
 
     private void validateLottoNumbersRange(List<LottoNumber> numbers) {
         numbers.forEach(number -> {
-            if (number.getValue() < MIN_LOTTO_NUMBER.getNumber() || number.getValue() > MAX_LOTTO_NUMBER.getNumber()) {
+            if (number.getValue() < LOTTO_START_NUMBER.getValue() || number.getValue() > LOTTO_END_NUMBER.getValue()) {
                 throw new IllegalArgumentException(LOTTO_NUMBER_OUT_OF_BOUNDS.getMessage());
             }
         });
