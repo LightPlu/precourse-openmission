@@ -1,4 +1,4 @@
-package lotto.infrastructure.db;
+package lotto.infrastructure.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +18,7 @@ import lotto.domain.repository.RoundRepository;
 import lotto.domain.vo.Lotto;
 import lotto.domain.vo.LottoNumber;
 import lotto.domain.vo.Rank;
+import lotto.infrastructure.db.DBConnectionManager;
 
 public class PostgresRoundRepository implements RoundRepository {
 
