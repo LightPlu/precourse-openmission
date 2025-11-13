@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 public class Lotto {
     private final List<LottoNumber> numbers;
 
-    public Lotto(List<LottoNumber> numbers) {
+    private Lotto(List<LottoNumber> numbers) {
         validate(numbers);
         validateLottoNumbersRange(numbers);
         validateDuplicate(numbers);
         this.numbers = getSortedNumbers(numbers);
+    }
+
+    public static Lotto of(List<LottoNumber> numbers) {
+        return new Lotto(numbers);
     }
 
     private void validate(List<LottoNumber> numbers) {
