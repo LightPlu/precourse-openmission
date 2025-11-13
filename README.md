@@ -58,6 +58,8 @@
 ## Entity 및 VO
 
 - 식별자로 인해 구분해야 하는 것(Entity)
+  - Round(로또게임의 각 회차)[Aggregate Root]
+    - 로또의 각 회차를 관리한다.
   - LottoTicket(로또의 각 게임)
     - 각 게임에는 최소 1개, 최대 5개의 로또 추첨이 들어갈 수 있다
     - 각 티켓별로 최종 당첨금을 계산하는 로직이 구현되어야 한다.
@@ -96,6 +98,7 @@
 - 현재 LottoResult Entity를 통해서 회차당 당첨된 내역들을 저장하려 했는데 현재 구현하는 도중 티켓별로 당첨 내역을 저장하기 위해 LottoResult를 사용했다. 어떻게 추후 구현을할까?
   - 우선 생각을 해보면 티켓별 내역을 굳이 저장해야하나? 필요없다. Entity -> VO로 이동시키자. 그러면 어떻게 회차별로 저장을 하지? 저장할 때 그저 회차내 모든 LottoResult들을 다 조회해서 더해야하나? 그렇다기엔 LottoResult를 DB에 저장해두기엔 너무 많은 공간 낭비가 들어간다.
   - LottoResult를 VO로 이동시키고, RoundResult를 Entity에 추가하여 당첨과 관련된 Aggregate Root로 만들자.
+  - Round를 관리하는 Entity가 없으므로 Round Entity를 추가하고 해당 Entity를 Aggregate Root로 만듦. RoundResult Aggregate Root 아님.
 
 
 - RoundResult를 구현하는 과정에서 평탄화라는 개념이 등장하는데 평탄화란것은 무엇일까?
