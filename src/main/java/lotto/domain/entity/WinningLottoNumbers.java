@@ -9,15 +9,21 @@ import java.util.List;
 import lotto.domain.vo.LottoNumber;
 
 public class WinningLottoNumbers {
+    private final long roundId;
     private final List<LottoNumber> winningNumbers;
     private final LottoNumber bonusNumber;
 
-    public WinningLottoNumbers(List<LottoNumber> winningNumbers, LottoNumber bonusNumber) {
+    private WinningLottoNumbers(List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
         validateBonusNumberRange(bonusNumber);
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
         this.winningNumbers = winningNumbers;
         this.bonusNumber = bonusNumber;
+        this.roundId = roundId;
+    }
+
+    public static WinningLottoNumbers of(List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
+        return new WinningLottoNumbers(winningNumbers, bonusNumber, roundId);
     }
 
     private void validateBonusNumberRange(LottoNumber bonusNumber) {
