@@ -193,3 +193,12 @@
 
 - 현재 DB에 쿼리를 날리는 도중 에러가 발생. 
   - 테이블 몇, 컬럼 명 다 잘 확인하기. 비슷해보인다고 그냥 넘어가면 안된다. 하나하나 맞는지 다 확인해봐야한다.
+
+  
+- 현재 Controller에 RoundResult가 노출되어있다. 어떻게 해당 도메인을 숨길 수 있을까?
+  - 다른 도메인 같은 경우에는 List로 숨길 수 있다. 단순한 숫자들의 집합이기 때문이다.
+  - RoundResult 같은 경우는 Rank와 Integer 타입의 Map 이다. 어떻게 숨기지?
+    - DTO를 만들어 Application Service에서 domain을 DTO로 변환하여 반환한다면 domain을 숨길 수 있다.
+    - 해당 내용은 Clean Architecture 에서 다룬다고 한다. 일지에도 써놨지만 오픈미션 끝나면 한번 읽어봐야겠다. DDD 주도 개발 시작하기 책과 같이 내 궁금증을 잘 긁어줄 책일 것 같다.
+    - 근데 다시 생각해보니 굳이 RoundResult 하나때문에 DTO를 따로 만들어야 할까?
+      - Map<String, Integer>로 넘기자. 이 생각을 못했다.
