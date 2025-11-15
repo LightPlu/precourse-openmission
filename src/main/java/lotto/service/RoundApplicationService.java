@@ -1,7 +1,7 @@
 package lotto.service;
 
+import java.util.List;
 import lotto.domain.entity.Round;
-import lotto.domain.entity.RoundResult;
 
 public interface RoundApplicationService {
 
@@ -11,6 +11,8 @@ public interface RoundApplicationService {
 
     Round getRoundInfo(int roundNumber);
 
-    RoundResult closeRoundAndStartNextRound();
+    void closeRoundAndStartNextRound();
+
+    List<Integer> findAllRoundNumbers();
 
 }

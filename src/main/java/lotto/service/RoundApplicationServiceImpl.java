@@ -46,7 +46,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     }
 
     @Override
-    public RoundResult closeRoundAndStartNextRound() {
+    public void closeRoundAndStartNextRound() {
 
         // 1) 현재 회차 조회
         int roundId = getLatestRound();
@@ -86,8 +86,10 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
 
         // 6) 다음 회차 생성
         startNewRound();
+    }
 
-        return savedResult;
+    public List<Integer> findAllRoundNumbers() {
+        return roundRepository.findAllRoundNumbers();
     }
 
 }
