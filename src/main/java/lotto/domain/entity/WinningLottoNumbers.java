@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import lotto.domain.vo.LottoNumber;
 
 public class WinningLottoNumbers {
-    private final long id;
-    private final long roundId;
+    private final int id;
+    private final int roundId;
     private final List<LottoNumber> winningNumbers;
     private final LottoNumber bonusNumber;
 
-    private WinningLottoNumbers(long id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
+    private WinningLottoNumbers(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, int roundId) {
         validateBonusNumberRange(bonusNumber);
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
@@ -25,7 +25,7 @@ public class WinningLottoNumbers {
         this.roundId = roundId;
     }
 
-    public static WinningLottoNumbers of(long id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, long roundId) {
+    public static WinningLottoNumbers of(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, int roundId) {
         return new WinningLottoNumbers(id, winningNumbers, bonusNumber, roundId);
     }
 
@@ -52,11 +52,11 @@ public class WinningLottoNumbers {
         });
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public long getRoundId() {
+    public int getRoundId() {
         return roundId;
     }
 

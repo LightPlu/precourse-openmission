@@ -4,22 +4,22 @@ import java.util.Objects;
 
 public class Round {
 
-    private final Long id;
+    private final int id;
     private final int roundNumber;
 
     private WinningLottoNumbers winningLottoNumbers;
     private RoundResult roundResult;
 
-    public Round(Long id, int roundNumber) {
+    public Round(int id, int roundNumber) {
         this.id = id;
         this.roundNumber = roundNumber;
     }
 
     public static Round of(int roundNumber) {
-        return new Round(null, roundNumber);
+        return new Round(0, roundNumber);
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

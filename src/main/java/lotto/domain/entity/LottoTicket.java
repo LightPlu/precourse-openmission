@@ -5,20 +5,20 @@ import java.util.stream.Collectors;
 import lotto.domain.vo.Lotto;
 
 public class LottoTicket {
-    private final long id;
-    private final long roundId;
+    private final int id;
+    private final int roundId;
     private final List<Lotto> lottos;
     private static final int LOTTO_MAXIMUM_PURCHASE = 5;
 
-    private LottoTicket(long id, List<Lotto> lottos, long roundId) {
+    private LottoTicket(int id, int roundId, List<Lotto> lottos) {
         validateLottoPurchaseRange(lottos);
         this.id = id;
         this.lottos = lottos;
         this.roundId = roundId;
     }
 
-    public static LottoTicket of(long id, List<Lotto> lottos, long roundId) {
-        return new LottoTicket(id, lottos, roundId);
+    public static LottoTicket of(int roundId, List<Lotto> lottos) {
+        return new LottoTicket(0, roundId, lottos);
     }
 
     private void validateLottoPurchaseRange(List<Lotto> lottos) {
@@ -31,7 +31,7 @@ public class LottoTicket {
         return List.copyOf(lottos);
     }
 
-    public long getRoundId() {
+    public int getRoundId() {
         return roundId;
     }
 
