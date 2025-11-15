@@ -83,6 +83,39 @@
 
 ---
 
+## Use case
+### Use case : 사용자가 애플리케이션을 통해 하고자 하는 "행동(목적)"을 표현한 것
+
+- Round 관련 Use case
+  - 최신 회차 조회
+  - 새로운 회차 시작
+  - 특정 회차 상세 조회
+  - 특정 회차 LottoTicket들과 당첨 번호를 비교
+
+
+- Ticket 관련 Use case
+  - Lotto Ticket 발행
+  - 특정 회차 티켓 목록 조회(필요할까?)
+
+
+- WinningLottoNumber 관련 Use case
+  - 당첨 번호 등록
+  - 특정 회차 당첨 번호 조회
+
+
+- Round Result 관련 Use case
+  - Round Result 저장
+  - 특정 회차 결과 조회
+
+
+- Round 종료 및 그 다음 회차 시작 Use case[제일 중요한 Use case]
+  - 1. roundNumber로 한 회차의 모든 Ticket 조회
+  - 2. roundNumber로 해당 회차의 당첨 번호 조회
+  - 3. 로또 티켓 비교 로직을 통해 모든 Ticket 비교
+  - 4. 회차 결과를 다루는 RoundResult 저장
+  - 5. 다음 회차 자동 시작
+
+
 ## 프로젝트를 리팩토링 하며 생긴 의문점
 
 - Cash VO 내에 금액을 통하여 로또를 발행할 횟수를 저장하는 멤버변수 fullGameCount, remainingGameCount 멤버 변수를 따로 GameCount VO로 나누는 것이 맞을까?
@@ -133,3 +166,17 @@
 
 - 갑자기 발생한 git push 500 ERROR!!!!! 도대체 왜 갑자기? 살면서 한번도 이래본적이 없는데?
   - ?? 기존 커밋들 다 리셋하고 하나하나 커밋마다 push하니까 된다. 도대체 뭐지 진짜?
+  - 디스코드에도 물어보고, 웹서핑도 해봤는데 파일 크기 문제라고는 하는데 내 프로젝트 파일들은 전부 합쳐서 지금 1.6MB 밖에 안되는데 파일 크기 문제는 아닌거같다. 정말 이상하네
+
+
+- 현재 도메인 서비스에서 LottoTicket List를 반환하도록 메서드를 만들어놨는데 그럼 몇회차인지에 대해 어떻게 알고 Ticket을 만들지?
+  - 도메인 서비스에서는 List<List<Lotto>>로 로또들을 5개이내로 묶은 리스트만을 반환하고 Application Service에서 회차에 대한 정보를 주입하여 LottoTicket을 만들자
+
+
+- DIP를 유지하기 위해선 생성자로부터 의존성 주입을 받아야 하는데 그렇다면 최중 Root는 new를 사용해 객체를 생성해야하는 것 아닌가? 그럴려면 모든 계층에 의존해야 하는데 그래도 괜찮은 것인가?
+  - 애플리케이션의 가장 바깥쪽에 config를 만들어 Composition Root 에서만 new를 통해 객체를 생성하고 해당 객체들을 주입한다.
+  - Composition Root : 애플리케이션 전체에서 객체를 생성하고 의존성을 조립하는 유일한 위치(Spring 없이 Spring Container를 대신하는 곳)
+  - 자동 DI(Dependency Injection), 수동 DI가 존재
+  - 자동 DI는 Spring, NestJS 등이 자동으로 주입해주는 것을 의미하고, 수동 DI는 개발자가 직접 new 객체를 통해 주입하는 것을 의미
+  - 현재 나의 프로젝트에서는 수동 DI 방식을 사용하여 개발자가 직접 주입해줘야 하는데 DIP 원칙을 적용하기 위해 각 계층에선 new 객체를 통하지 않고 Application의 최상위인 config 에서 필요한 모든 것을 new 객체로 생성하고 주입
+  - Composition Root 를 도입하여 의존성 주입에 대한 주체를 ApplicationConfig에 둔다면 Clean Architecture를 지킬 수 있다고 한다. 해당 관련된 책도 책 묶음에 있었던거 같은데 한번 오픈미션 끝나고 읽어봐야겠다.
