@@ -32,4 +32,12 @@ public class TypeConverter {
             throw new IllegalArgumentException(INPUT_VALUE_IS_INVALID.getMessage());
         }
     }
+
+    public int menuTypeConvert(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(INPUT_VALUE_IS_INVALID.getMessage());
+        }
+    }
 }
