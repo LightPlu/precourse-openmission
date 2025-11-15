@@ -52,10 +52,6 @@ public class WinningLottoNumbers {
         });
     }
 
-    public int getId() {
-        return id;
-    }
-
     public int getRoundId() {
         return roundId;
     }
