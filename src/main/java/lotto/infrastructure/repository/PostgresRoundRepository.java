@@ -315,4 +315,23 @@ public class PostgresRoundRepository implements RoundRepository {
         }
     }
 
+    @Override
+    public List<Integer> findAllRoundNumbers() {
+        String sql = "SELECT round_number FROM round ORDER BY round_number ASC";
+        List<Integer> list = new ArrayList<>();
+
+        try (Connection conn = DBConnectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(rs.getInt("round_number"));
+            }
+            return list;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("findAllRoundNumbers() 실행 실패", e);
+        }
+    }
+
 }

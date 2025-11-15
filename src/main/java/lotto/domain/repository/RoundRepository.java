@@ -27,4 +27,6 @@ public interface RoundRepository {
     RoundResult saveRoundResult(RoundResult result);
 
     Optional<RoundResult> findRoundResultByRoundId(int roundId);
+
+    List<Integer> findAllRoundNumbers();
 }
