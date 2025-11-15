@@ -1,8 +1,8 @@
 package lotto.service;
 
-import lotto.domain.entity.RoundResult;
+import java.util.Map;
 
 public interface RoundResultApplicationService {
 
-    RoundResult getRoundResult(int roundNumber);
+    Map<String, Integer> getRoundResult(int roundNumber);
 }
