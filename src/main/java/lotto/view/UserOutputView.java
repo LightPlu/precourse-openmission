@@ -1,42 +1,45 @@
 package lotto.view;
 
-import static lotto.view.DigitsMatch.EARNING_RATE;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
+import lotto.domain.entity.RoundResult;
 
 public class UserOutputView {
 
-    private static final String WINNING_STATICS_MESSAGE = "당첨 통계";
-    private static final String BAR = "---";
-    private static final String LOTTO_COUNT_MESSAGE = "%d개를 구매했습니다.";
-
-
-    public void printTotalStatics(List<Integer> winningStats, double earningRate) {
-        printWinningStaticsMessage();
-        List<DigitsMatch> messages = Arrays.asList(DigitsMatch.values());
-
-        IntStream.range(0, winningStats.size())
-                .forEach(i ->
-                        System.out.println(
-                                ViewFormatter.lottoResultFormat(messages.get(i), winningStats.get(i))
-                        ));
-
-        System.out.println(ViewFormatter.earningRateFormat(EARNING_RATE, earningRate));
+    public void printMenu() {
+        System.out.println("\n===== 로또 시스템 =====");
+        System.out.println("1. 새 회차 시작");
+        System.out.println("2. 로또 구매");
+        System.out.println("3. 당첨번호 등록");
+        System.out.println("4. 회차 종료");
+        System.out.println("5. 회차 결과 조회");
+        System.out.println("0. 종료");
+        System.out.println("======================");
     }
 
-    private void printWinningStaticsMessage() {
-        System.out.println(WINNING_STATICS_MESSAGE);
-        System.out.println(BAR);
+    public void printExistRound(List<Integer> roundNumbers) {
+
+        System.out.println("\n===== 현재 존재하는 회차 목록 =====");
+        if (roundNumbers.isEmpty()) {
+            System.out.println("▶ 등록된 회차가 없습니다.");
+            System.out.println("=================================\n");
+            return;
+        }
+
+        for (Integer num : roundNumbers) {
+            System.out.println("▶ " + num + "회차");
+        }
+        System.out.println("=================================\n");
     }
 
-    public void printLottoCountMessage(int count) {
-        System.out.println(ViewFormatter.lottoCountFormat(LOTTO_COUNT_MESSAGE, count));
-    }
 
-    public void printLottoHistory(String lottoHistory) {
-        System.out.println(lottoHistory);
+    public void printRoundResult(RoundResult r) {
+        System.out.println("=== " + r.getRoundId() + "회차 결과 ===");
+
+        r.getRankResults().forEach((rank, count) -> {
+            System.out.println(rank + ": " + count + "개" + " | 등수별 총 금액 : " + rank.getPrize() * count);
+        });
+
+        System.out.println("=============================");
     }
 
 }
