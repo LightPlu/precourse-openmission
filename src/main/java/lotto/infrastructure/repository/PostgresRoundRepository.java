@@ -31,7 +31,7 @@ public class PostgresRoundRepository implements RoundRepository {
              ResultSet rs = pstmt.executeQuery()) {
 
             if (rs.next()) {
-                long id = rs.getLong("id");
+                int id = rs.getInt("id");
                 int roundNumber = rs.getInt("round_number");
 
                 return Optional.of(new Round(id, roundNumber));
@@ -56,7 +56,7 @@ public class PostgresRoundRepository implements RoundRepository {
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next()) {
-                    long id = rs.getLong("id");
+                    int id = rs.getInt("id");
                     int number = rs.getInt("round_number");
 
                     return Optional.of(new Round(id, number));
@@ -82,7 +82,7 @@ public class PostgresRoundRepository implements RoundRepository {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    long generatedId = rs.getLong("id");
+                    int generatedId = rs.getInt("id");
                     return new Round(generatedId, round.getRoundNumber());
                 } else {
                     throw new RuntimeException("Round INSERT 실패 — id가 반환되지 않음");
@@ -99,7 +99,7 @@ public class PostgresRoundRepository implements RoundRepository {
 
         String sql = "INSERT INTO lotto_ticket (round_id, numbers) VALUES (?, ?)";
 
-        long roundId = tickets.getFirst().getRoundId(); // 모든 ticket은 같은 round
+        int roundId = tickets.getFirst().getRoundId(); // 모든 ticket은 같은 round
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -107,7 +107,7 @@ public class PostgresRoundRepository implements RoundRepository {
             conn.setAutoCommit(false); // 트랜잭션 시작
 
             for (LottoTicket ticket : tickets) {
-                pstmt.setLong(1, ticket.getRoundId());
+                pstmt.setInt(1, ticket.getRoundId());
                 pstmt.setString(2, ticket.numbersAsCsv());
                 pstmt.addBatch();  // batch에 추가
             }
@@ -135,26 +135,26 @@ public class PostgresRoundRepository implements RoundRepository {
     }
 
     @Override
-    public List<LottoTicket> findTicketsByRoundId(long roundId) {
+    public List<LottoTicket> findTicketsByRoundId(int roundId) {
         String sql = "SELECT id, numbers FROM lotto_ticket WHERE round_id = ?";
         List<LottoTicket> tickets = new ArrayList<>();
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setLong(1, roundId);
+            pstmt.setInt(1, roundId);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
 
-                long id = rs.getLong("id");
+                int id = rs.getInt("id");
                 String numbersText = rs.getString("numbers");
 
                 // TEXT → List<Lotto> 복원
                 List<Lotto> lottos = parseLottos(numbersText);
 
                 // 엔티티 생성
-                LottoTicket ticket = LottoTicket.of(id, lottos, roundId);
+                LottoTicket ticket = LottoTicket.of(roundId, lottos);
                 tickets.add(ticket);
             }
 
@@ -175,7 +175,7 @@ public class PostgresRoundRepository implements RoundRepository {
 
             LottoNumber bonusNumber = winning.getBonusNumber();
 
-            pstmt.setLong(1, winning.getRoundId());
+            pstmt.setInt(1, winning.getRoundId());
             pstmt.setString(2, winning.winningNumbersAsCsv());
             pstmt.setInt(3, bonusNumber.getValue());
 
@@ -194,19 +194,19 @@ public class PostgresRoundRepository implements RoundRepository {
 
 
     @Override
-    public Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(long roundId) {
+    public Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(int roundId) {
         String sql = "SELECT id, winning_numbers, bonus_number " +
                 "FROM winning_numbers WHERE round_id = ?";
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setLong(1, roundId);
+            pstmt.setInt(1, roundId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next()) {
-                    long id = rs.getLong("id");
+                    int id = rs.getInt("id");
 
                     List<LottoNumber> winningList =
                             parseWinningNumbers(rs.getString("winning_numbers"));
@@ -231,7 +231,7 @@ public class PostgresRoundRepository implements RoundRepository {
     }
 
     @Override
-    public void saveRoundResult(RoundResult result) {
+    public RoundResult saveRoundResult(RoundResult result) {
         String sql = "INSERT INTO round_result (" +
                 "round_id, first, second, third, fourth, fifth, miss" +
                 ") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
@@ -241,7 +241,7 @@ public class PostgresRoundRepository implements RoundRepository {
 
             Map<Rank, Integer> r = result.getRankResults();
 
-            pstmt.setLong(1, result.getRoundId());
+            pstmt.setInt(1, result.getRoundId());
             pstmt.setInt(2, r.get(Rank.FIRST));
             pstmt.setInt(3, r.get(Rank.SECOND));
             pstmt.setInt(4, r.get(Rank.THIRD));
@@ -249,12 +249,24 @@ public class PostgresRoundRepository implements RoundRepository {
             pstmt.setInt(6, r.get(Rank.FIFTH));
             pstmt.setInt(7, r.get(Rank.MISS));
 
-            pstmt.executeQuery();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int generatedId = rs.getInt("id");
+                    return RoundResult.of(
+                            generatedId,
+                            result.getRoundId(),
+                            result.getRankResults()
+                    );
+                } else {
+                    throw new RuntimeException("RoundResult 삽입 실패 – id가 반환되지 않았습니다.");
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("saveRoundResult 실행 실패", e);
         }
     }
+
 
     private Map<Rank, Integer> buildRankResults(ResultSet rs) throws SQLException {
         Map<Rank, Integer> map = new EnumMap<>(Rank.class);
@@ -270,19 +282,19 @@ public class PostgresRoundRepository implements RoundRepository {
     }
 
     @Override
-    public Optional<RoundResult> findRoundResultByRoundId(long roundId) {
+    public Optional<RoundResult> findRoundResultByRoundId(int roundId) {
         String sql = "SELECT id, first, second, third, fourth, fifth, miss " +
                 "FROM round_result WHERE round_id = ?";
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setLong(1, roundId);
+            pstmt.setInt(1, roundId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next()) {
-                    long id = rs.getLong("id");
+                    int id = rs.getInt("id");
 
                     // Rank별 결과 Map 생성
                     Map<Rank, Integer> rankResults = buildRankResults(rs);
