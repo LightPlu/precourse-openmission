@@ -1,7 +1,7 @@
 package lotto.controller;
 
 import java.util.List;
-import lotto.domain.entity.RoundResult;
+import java.util.Map;
 import lotto.service.RoundApplicationService;
 import lotto.service.RoundResultApplicationService;
 import lotto.service.TicketApplicationService;
@@ -71,8 +71,8 @@ public class LottoController {
                 List<Integer> winningNumbers = userInputView.printWinningNumbersMessage();
                 int bonus = userInputView.printBonusNumbersMessage();
 
+
                 winningService.saveWinningNumbers(winningNumbers, bonus);
-                break;
             } catch (Exception e) {
                 System.out.println("[ERROR] " + e.getMessage());
             }
@@ -95,8 +95,8 @@ public class LottoController {
         int round = userInputView.printChoiceRoundNumberMessage();
 
         try {
-            RoundResult rr = resultService.getRoundResult(round);
-            userOutputView.printRoundResult(rr);
+            Map<String, Integer> result = resultService.getRoundResult(round);
+            userOutputView.printRoundResult(round, result);
         } catch (Exception e) {
             System.out.println("[ERROR] " + e.getMessage());
         }

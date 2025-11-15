@@ -1,7 +1,7 @@
 package lotto.view;
 
 import java.util.List;
-import lotto.domain.entity.RoundResult;
+import java.util.Map;
 
 public class UserOutputView {
 
@@ -32,11 +32,11 @@ public class UserOutputView {
     }
 
 
-    public void printRoundResult(RoundResult r) {
-        System.out.println("=== " + r.getRoundId() + "회차 결과 ===");
+    public void printRoundResult(int roundNumber, Map<String, Integer> results) {
+        System.out.println("=== " + roundNumber + "회차 결과 ===");
 
-        r.getRankResults().forEach((rank, count) -> {
-            System.out.println(rank + ": " + count + "개" + " | 등수별 총 금액 : " + rank.getPrize() * count);
+        results.forEach((rankName, count) -> {
+            System.out.println(rankName + " : " + count + "개");
         });
 
         System.out.println("=============================");
