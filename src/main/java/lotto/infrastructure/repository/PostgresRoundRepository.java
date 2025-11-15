@@ -167,8 +167,8 @@ public class PostgresRoundRepository implements RoundRepository {
 
     @Override
     public void saveWinningLottoNumbers(WinningLottoNumbers winning) {
-        String sql = "INSERT INTO winning_numbers (round_id, winning_numbers, bonus_number) " +
-                "VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO winning_lotto_numbers (round_id, numbers, bonus_number) " +
+                "VALUES (?, ?, ?) RETURNING round_id";
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -195,8 +195,8 @@ public class PostgresRoundRepository implements RoundRepository {
 
     @Override
     public Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(int roundId) {
-        String sql = "SELECT id, winning_numbers, bonus_number " +
-                "FROM winning_numbers WHERE round_id = ?";
+        String sql = "SELECT round_id, numbers, bonus_number " +
+                "FROM winning_lotto_numbers WHERE round_id = ?";
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -206,10 +206,10 @@ public class PostgresRoundRepository implements RoundRepository {
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next()) {
-                    int id = rs.getInt("id");
+                    int id = rs.getInt("round_id");
 
                     List<LottoNumber> winningList =
-                            parseWinningNumbers(rs.getString("winning_numbers"));
+                            parseWinningNumbers(rs.getString("numbers"));
 
                     LottoNumber bonus =
                             LottoNumber.of(rs.getInt("bonus_number"));
