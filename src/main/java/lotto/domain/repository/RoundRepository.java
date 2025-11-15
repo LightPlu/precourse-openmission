@@ -16,15 +16,15 @@ public interface RoundRepository {
 
     Round saveRound(Round round);
 
-    List<LottoTicket> findTicketsByRoundId(long roundId);
+    List<LottoTicket> findTicketsByRoundId(int roundId);
 
     void saveTickets(List<LottoTicket> ticket);
 
     void saveWinningLottoNumbers(WinningLottoNumbers winningNumbers);
 
-    Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(long roundId);
+    Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(int roundId);
 
-    void saveRoundResult(RoundResult result);
+    RoundResult saveRoundResult(RoundResult result);
 
-    Optional<RoundResult> findRoundResultByRoundId(long roundId);
+    Optional<RoundResult> findRoundResultByRoundId(int roundId);
 }
