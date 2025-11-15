@@ -3,7 +3,7 @@ package lotto.domain.vo;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 
-public class LottoNumber {
+public class LottoNumber implements Comparable<LottoNumber>{
     private final int value;
 
     private LottoNumber(int value) {
@@ -23,6 +23,11 @@ public class LottoNumber {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public int compareTo(LottoNumber other) {
+        return Integer.compare(this.value, other.value);
     }
 
     @Override
