@@ -22,8 +22,14 @@ public class RoundResult {
         return new RoundResult(id, roundId, rankResults);
     }
 
-    public int getId() {
-        return id;
+    public Map<String, Integer> toMap() {
+        return rankResults.entrySet().stream()
+                .collect(
+                        java.util.stream.Collectors.toMap(
+                                entry -> entry.getKey().name(),   // "FIRST", "SECOND"
+                                Map.Entry::getValue
+                        )
+                );
     }
 
     public int getRoundId() {
