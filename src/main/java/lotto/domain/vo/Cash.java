@@ -22,6 +22,10 @@ public class Cash {
         this.remainingGameCount = calculateRemainingGameCount(money);
     }
 
+    public static Cash of(int money) {
+        return new Cash(money);
+    }
+
     private void validateMoneyDivisible(int money) {
         if (money % LOTTO_PRICE.getValue() != ZERO.getValue()) {
             throw new IllegalArgumentException(CASH_IS_NOT_DIVISIBLE.getMessage());
@@ -41,11 +45,11 @@ public class Cash {
     }
 
     private int calculateFullGameCount(int money) {
-        return money / LOTTO_GAME_MAX_PURCHASE.getValue();
+        return money / (LOTTO_GAME_MAX_PURCHASE.getValue() * LOTTO_PRICE.getValue());
     }
 
     private int calculateRemainingGameCount(int money) {
-        int eachMoney = money % LOTTO_GAME_MAX_PURCHASE.getValue();
+        int eachMoney = money % (LOTTO_GAME_MAX_PURCHASE.getValue() * LOTTO_PRICE.getValue());
         return eachMoney / LOTTO_PRICE.getValue();
     }
 
