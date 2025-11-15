@@ -6,7 +6,6 @@ import static lotto.domain.NumberConstants.ZERO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-import lotto.domain.entity.LottoTicket;
 import lotto.domain.vo.Cash;
 import lotto.domain.vo.Lotto;
 
@@ -18,25 +17,24 @@ public class LottoPurchaseService {
         this.lottoNumberGenerator = randomNumberGenerator;
     }
 
-    public List<LottoTicket> purchase(Cash cash) {
-        List<LottoTicket> lottoTickets = new ArrayList<>();
+    public List<List<Lotto>> purchase(Cash cash) {
+        List<List<Lotto>> result = new ArrayList<>();
 
-        IntStream.range(ZERO.getValue(), cash.getFullGameCount())
+        IntStream.range(0, cash.getFullGameCount())
                 .mapToObj(i -> createLottoTicket(LOTTO_GAME_MAX_PURCHASE.getValue()))
-                .forEach(lottoTickets::add);
+                .forEach(result::add);
 
-        if (cash.getRemainingGameCount() > ZERO.getValue()) {
-            lottoTickets.add(createLottoTicket(cash.getRemainingGameCount()));
+        if (cash.getRemainingGameCount() > 0) {
+            result.add(createLottoTicket(cash.getRemainingGameCount()));
         }
 
-        return lottoTickets;
+        return result;
     }
 
-    private LottoTicket createLottoTicket(int gameCount) {
-        List<Lotto> lottos = IntStream.range(ZERO.getValue(), gameCount)
-                .mapToObj(i -> new Lotto(lottoNumberGenerator.createNumbers()))
+    private List<Lotto> createLottoTicket(int gameCount) {
+        return IntStream.range(ZERO.getValue(), gameCount)
+                .mapToObj(i -> Lotto.of(lottoNumberGenerator.createNumbers()))
                 .toList();
-        return new LottoTicket(lottos);
     }
 
 }
