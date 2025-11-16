@@ -1,5 +1,6 @@
 package lotto.domain.vo;
 
+import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 
@@ -13,7 +14,7 @@ public class LottoNumber implements Comparable<LottoNumber>{
 
     private void validate(int value) {
         if (value < LOTTO_START_NUMBER.getValue() || value > LOTTO_END_NUMBER.getValue()) {
-            throw new IllegalArgumentException("[ERROR] 로또 번호는 1~45 사이여야 합니다.");
+            throw new IllegalArgumentException(LOTTO_NUMBER_OUT_OF_BOUNDS.getMessage());
         }
     }
 
