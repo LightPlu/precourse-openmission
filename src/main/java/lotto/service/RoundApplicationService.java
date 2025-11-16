@@ -13,4 +13,6 @@ public interface RoundApplicationService {
 
     List<Integer> findAllRoundNumbers();
 
+    int findRoundIdByRoundNumber(int roundNumber);
+
 }

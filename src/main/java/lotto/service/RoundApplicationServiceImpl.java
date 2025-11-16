@@ -37,7 +37,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     public Round startNewRound() {
         int nextNumber = roundRepository.findLatestRound()
                 .map(r -> r.getRoundNumber() + 1)
-                .orElse(1);  // 첫 회차
+                .orElse(1);
 
         Round newRound = Round.of(nextNumber);
         return roundRepository.saveRound(newRound);
@@ -46,10 +46,8 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     @Override
     public void closeRoundAndStartNextRound() {
 
-        // 1) 현재 회차 조회
         int roundId = getLatestRound();
 
-        // 2) 티켓 조회
         List<LottoTicket> tickets =
                 roundRepository.findTicketsByRoundId(roundId);
 
@@ -57,7 +55,6 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
             throw new IllegalStateException(NO_TICKETS.getMessage());
         }
 
-        // 3) 당첨 번호 조회
         WinningLottoNumbers winning =
                 roundRepository.findWinningLottoNumbersByRoundId(roundId)
                         .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
@@ -88,8 +85,16 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
         startNewRound();
     }
 
+    @Override
     public List<Integer> findAllRoundNumbers() {
         return roundRepository.findAllRoundNumbers();
+    }
+
+    @Override
+    public int findRoundIdByRoundNumber(int roundNumber) {
+        Round round = roundRepository.findByRoundNumber(roundNumber)
+                .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
+        return round.getId();
     }
 
 }
