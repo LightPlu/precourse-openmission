@@ -9,6 +9,6 @@ public interface WinningLottoApplicationService {
     void saveWinningNumbers(List<Integer> numbers, int bonus);
 
     // 2) 회차 당첨 번호 조회
-    WinningLottoNumbers getWinningNumbers(int roundNumber);
+    String getWinningNumbers(int roundNumber);
 
 }

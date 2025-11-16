@@ -104,7 +104,9 @@ public class LottoController {
         try {
             Map<String, Integer> result = resultService.getRoundResult(round);
             Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
-            userOutputView.printRoundResult(round, result, prizeResult);
+            long lottoNumber = resultService.calculateLottoSize(round);
+            String winningNumbers = winningService.getWinningNumbers(round);
+            userOutputView.printRoundResult(round, result, prizeResult, lottoNumber, winningNumbers);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

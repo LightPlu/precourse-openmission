@@ -52,9 +52,10 @@ public class WinningLottoApplicationServiceImpl implements WinningLottoApplicati
     }
 
     @Override
-    public WinningLottoNumbers getWinningNumbers(int roundNumber) {
-
-        return roundRepository.findWinningLottoNumbersByRoundId(roundNumber)
+    public String getWinningNumbers(int roundNumber) {
+        WinningLottoNumbers winningLottoNumbers = roundRepository.findWinningLottoNumbersByRoundId(roundNumber)
                 .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
+
+        return winningLottoNumbers.winningNumbersAsCsv() + winningLottoNumbers.bonusNumberAsCsv();
     }
 }

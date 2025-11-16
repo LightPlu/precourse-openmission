@@ -65,10 +65,15 @@ public class WinningLottoNumbers {
     }
 
     public String winningNumbersAsCsv() {
-        return winningNumbers.stream()
+        return "당첨 번호 : " + winningNumbers.stream()
                 .map(n -> String.valueOf(n.getValue()))
                 .collect(Collectors.joining(","));
     }
 
+    public String bonusNumberAsCsv() {
+        int bonusNumberValue = bonusNumber.getValue();
+
+        return " 보너스 번호 : " + String.valueOf(bonusNumberValue);
+    }
 
 }

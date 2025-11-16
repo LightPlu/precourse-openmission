@@ -32,16 +32,18 @@ public class UserOutputView {
     }
 
 
-    public void printRoundResult(int roundNumber, Map<String, Integer> results, Map<String, Long> prizeResult) {
+    public void printRoundResult(int roundNumber, Map<String, Integer> results, Map<String, Long> prizeResult,
+                                 long lottoNumber, String winningNumbers) {
         System.out.println("=== " + roundNumber + "회차 결과 ===");
+        System.out.println("이번 회차 당첨번호");
+        System.out.println(winningNumbers);
         System.out.println("이번 회차에 구매된 로또 갯수 : " + lottoNumber + "\n");
 
         results.forEach((rankName, count) -> {
             System.out.println(rankName + " : " + count + "개" + " | " + prizeResult.get(rankName) + "원");
         });
-
+        System.out.println();
         System.out.println("당첨금 합산 : " + prizeResult.get("TOTAL"));
-
         System.out.println("=============================");
     }
 
