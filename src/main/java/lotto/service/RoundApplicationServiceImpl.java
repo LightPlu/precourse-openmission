@@ -30,7 +30,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     public int getLatestRound() {
         Round round = roundRepository.findLatestRound()
                 .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
-        return round.getRoundNumber();
+        return round.getId();
     }
 
     @Override
@@ -59,7 +59,6 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
                 roundRepository.findWinningLottoNumbersByRoundId(roundId)
                         .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
 
-        // 4) Rank별 count 계산
         Map<Rank, Integer> counts = new EnumMap<>(Rank.class);
         for (Rank r : Rank.values()) {
             counts.put(r, 0);
@@ -77,11 +76,9 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
             }
         }
 
-        // 5) 결과 저장
         RoundResult result = RoundResult.of(0, roundId, counts);
         RoundResult savedResult = roundRepository.saveRoundResult(result);
 
-        // 6) 다음 회차 생성
         startNewRound();
     }
 
