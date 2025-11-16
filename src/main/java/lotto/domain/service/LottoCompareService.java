@@ -8,20 +8,11 @@ import lotto.domain.vo.Lotto;
 import lotto.domain.vo.CountResult;
 import lotto.domain.entity.WinningLottoNumbers;
 import lotto.domain.vo.LottoNumber;
-import lotto.domain.vo.PrizeDetail;
 import lotto.domain.vo.Rank;
 
 public class LottoCompareService {
 
-    public List<PrizeDetail> compareTicket(LottoTicket lottoTicket, WinningLottoNumbers winningLottoNumbers) {
-        Map<Rank, Integer> rankResults = countingResults(lottoTicket,  winningLottoNumbers);
-
-        return rankResults.entrySet().stream()
-                .map(entry -> PrizeDetail.of(entry.getKey(), entry.getValue()))
-                .toList();
-    }
-
-    private Map<Rank, Integer> countingResults(LottoTicket lottoTicket, WinningLottoNumbers winningLottoNumbers) {
+    public Map<Rank, Integer> compareTicket(LottoTicket lottoTicket, WinningLottoNumbers winningLottoNumbers) {
         Map<Rank, Integer> rankResults = new HashMap<>();
         for (Rank rank : Rank.values()) {
             rankResults.put(rank, 0);

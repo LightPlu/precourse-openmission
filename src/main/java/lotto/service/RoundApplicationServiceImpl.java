@@ -13,7 +13,6 @@ import lotto.domain.entity.RoundResult;
 import lotto.domain.entity.WinningLottoNumbers;
 import lotto.domain.repository.RoundRepository;
 import lotto.domain.service.LottoCompareService;
-import lotto.domain.vo.PrizeDetail;
 import lotto.domain.vo.Rank;
 
 public class RoundApplicationServiceImpl implements RoundApplicationService {
@@ -45,40 +44,17 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
 
     @Override
     public void closeRoundAndStartNextRound() {
+        int roundId = getValidRoundIdWithTickets();
 
-        int roundId = getLatestRound();
+        WinningLottoNumbers winning = roundRepository.findWinningLottoNumbersByRoundId(roundId)
+                .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
 
-        List<LottoTicket> tickets =
-                roundRepository.findTicketsByRoundId(roundId);
-
-        if (tickets.isEmpty()) {
-            throw new IllegalStateException(NO_TICKETS.getMessage());
-        }
-
-        WinningLottoNumbers winning =
-                roundRepository.findWinningLottoNumbersByRoundId(roundId)
-                        .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
-
-        Map<Rank, Integer> counts = new EnumMap<>(Rank.class);
-        for (Rank r : Rank.values()) {
-            counts.put(r, 0);
-        }
-
-        for (LottoTicket ticket : tickets) {
-            List<PrizeDetail> details =
-                    lottoCompareService.compareTicket(ticket, winning);
-
-            for (PrizeDetail d : details) {
-                counts.put(
-                        d.getRank(),
-                        counts.get(d.getRank()) + d.getCount()
-                );
-            }
-        }
-
-        RoundResult result = RoundResult.of(0, roundId, counts);
-        RoundResult savedResult = roundRepository.saveRoundResult(result);
-
+        RoundResult result = RoundResult.of(
+                0,
+                roundId,
+                aggregateRankCounts(roundRepository.findTicketsByRoundId(roundId), winning)
+        );
+        roundRepository.saveRoundResult(result);
         startNewRound();
     }
 
@@ -94,4 +70,29 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
         return round.getId();
     }
 
+    private Map<Rank, Integer> aggregateRankCounts(List<LottoTicket> tickets, WinningLottoNumbers winning) {
+        Map<Rank, Integer> counts = new EnumMap<>(Rank.class);
+        for (Rank r : Rank.values()) {
+            counts.put(r, 0);
+        }
+
+        for (LottoTicket ticket : tickets) {
+            Map<Rank, Integer> each = lottoCompareService.compareTicket(ticket, winning);
+
+            each.forEach((rank, count) ->
+                    counts.put(rank, counts.get(rank) + count)
+            );
+        }
+        return counts;
+    }
+
+    private int getValidRoundIdWithTickets() {
+        int roundId = getLatestRound();
+        List<LottoTicket> tickets = roundRepository.findTicketsByRoundId(roundId);
+
+        if (tickets.isEmpty()) {
+            throw new IllegalStateException(NO_TICKETS.getMessage());
+        }
+        return roundId;
+    }
 }
