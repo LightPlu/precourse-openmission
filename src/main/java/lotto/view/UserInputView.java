@@ -41,6 +41,7 @@ public class UserInputView {
     public int printChoiceRoundNumberMessage() {
         System.out.print(CHOICE_ROUND_NUMBER);
         String input = Console.readLine();
+        System.out.println();
         return typeConverter.convertInt(input);
     }
 }
