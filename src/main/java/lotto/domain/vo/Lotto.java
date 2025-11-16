@@ -2,6 +2,7 @@ package lotto.domain.vo;
 
 import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_IS_NOT_DUPLICATE;
 import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
+import static lotto.domain.DomainErrorMessage.LOTTO_SIZE_NOT_ALLOWED;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 
@@ -26,7 +27,7 @@ public class Lotto {
 
     private void validate(List<LottoNumber> numbers) {
         if (numbers.size() != 6) {
-            throw new IllegalArgumentException("[ERROR] 로또 번호는 6개여야 합니다.");
+            throw new IllegalArgumentException(LOTTO_SIZE_NOT_ALLOWED.getMessage());
         }
     }
 
