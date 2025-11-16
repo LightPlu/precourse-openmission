@@ -1,7 +1,6 @@
 package lotto.service;
 
 import java.util.List;
-import lotto.domain.entity.WinningLottoNumbers;
 
 public interface WinningLottoApplicationService {
 
