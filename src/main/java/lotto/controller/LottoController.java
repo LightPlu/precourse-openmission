@@ -1,7 +1,5 @@
 package lotto.controller;
 
-import static lotto.controller.ApplicationErrorMessage.INPUT_VALUE_IS_INVALID;
-
 import java.util.List;
 import java.util.Map;
 import lotto.service.RoundApplicationService;
@@ -19,6 +17,7 @@ public class LottoController {
     private final RoundResultApplicationService resultService;
     private final UserInputView userInputView = new UserInputView();
     private final UserOutputView userOutputView = new UserOutputView();
+    private boolean running = true;
 
 
     public LottoController(
@@ -34,35 +33,20 @@ public class LottoController {
     }
 
     public void run() {
-        while (true) {
+        while (running) {
             try{
                 userOutputView.printMenu();
                 int choice = userInputView.printChoiceMenuMessage();
 
-                switch (choice) {
-                    case 1 -> startNewRound();
-                    case 2 -> buyTickets();
-                    case 3 -> registerWinningNumbers();
-                    case 4 -> closeRound();
-                    case 5 -> showRoundResult();
-                    case 0 -> {
-                        System.out.println("프로그램 종료");
-                        return;
-                    }
-                    default -> System.out.println(INPUT_VALUE_IS_INVALID.getMessage());
-                }
+                MenuCommand menuCommand = MenuCommand.from(choice);
+                menuCommand.execute(this);
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
-
         }
     }
 
-    private void startNewRound() {
-        roundService.startNewRound();
-    }
-
-    private void buyTickets() {
+    public void buyTickets() {
         int money = userInputView.printPriceMessage();
 
         try {
@@ -72,22 +56,19 @@ public class LottoController {
         }
     }
 
-    private void registerWinningNumbers() {
-        while(true) {
+    public void registerWinningNumbers() {
             try {
                 List<Integer> winningNumbers = userInputView.printWinningNumbersMessage();
                 int bonus = userInputView.printBonusNumbersMessage();
 
                 winningService.saveWinningNumbers(winningNumbers, bonus);
-                break;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }
 
     }
 
-    private void closeRound() {
+    public void closeRound() {
 
         try {
             roundService.closeRoundAndStartNextRound();
@@ -96,11 +77,11 @@ public class LottoController {
         }
     }
 
-    private void showRoundResult() {
+    public void showRoundResult() {
         List<Integer> roundNumbers = roundService.findAllRoundNumbers();
         userOutputView.printExistRound(roundNumbers);
-        int round = userInputView.printChoiceRoundNumberMessage();
-
+        int roundNumber = userInputView.printChoiceRoundNumberMessage();
+        int round = roundService.findRoundIdByRoundNumber(roundNumber);
         try {
             Map<String, Integer> result = resultService.getRoundResult(round);
             Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
@@ -110,6 +91,10 @@ public class LottoController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void stop() {
+        this.running = false;
     }
 }
 
