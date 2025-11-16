@@ -7,11 +7,10 @@ public class UserOutputView {
 
     public void printMenu() {
         System.out.println("\n===== 로또 시스템 =====");
-        System.out.println("1. 새 회차 시작");
-        System.out.println("2. 로또 구매");
-        System.out.println("3. 당첨번호 등록");
-        System.out.println("4. 회차 종료");
-        System.out.println("5. 회차 결과 조회");
+        System.out.println("1. 로또 구매");
+        System.out.println("2. 당첨번호 등록");
+        System.out.println("3. 회차 종료");
+        System.out.println("4. 회차 결과 조회");
         System.out.println("0. 종료");
         System.out.println("======================");
     }

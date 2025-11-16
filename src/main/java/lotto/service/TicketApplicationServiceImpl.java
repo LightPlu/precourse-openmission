@@ -1,7 +1,5 @@
 package lotto.service;
 
-import static lotto.service.ServiceErrorMessage.NO_ROUND;
-
 import java.util.List;
 import lotto.domain.entity.LottoTicket;
 import lotto.domain.entity.Round;
@@ -25,8 +23,7 @@ public class TicketApplicationServiceImpl implements TicketApplicationService {
         Cash cash = Cash.of(money);
         List<List<Lotto>> purchased = lottoPurchaseService.purchase(cash);
 
-        Round round = roundRepository.findLatestRound()
-                .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
+        Round round = checkOrCreateRound();
 
         int roundId = round.getId();  // PK 가져오기
 
@@ -36,6 +33,15 @@ public class TicketApplicationServiceImpl implements TicketApplicationService {
                         .toList();
 
         roundRepository.saveTickets(tickets);
+    }
+
+    private Round checkOrCreateRound() {
+
+        return roundRepository.findLatestRound()
+                .orElseGet(() -> {
+                    Round newRound = Round.of(1);
+                    return roundRepository.saveRound(newRound);
+                });
     }
 
 }
