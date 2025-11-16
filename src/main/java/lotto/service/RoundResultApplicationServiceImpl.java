@@ -20,4 +20,11 @@ public class RoundResultApplicationServiceImpl implements RoundResultApplication
                 .orElseThrow(() -> new RuntimeException(NOT_FINISHED_ROUND.getMessage()));
         return result.toMap();
     }
+
+    @Override
+    public Map<String, Long> calculateWinningPrize(int roundNumber) {
+        RoundResult result = roundRepository.findRoundResultByRoundId(roundNumber)
+                .orElseThrow(() -> new RuntimeException(NOT_FINISHED_ROUND.getMessage()));
+        return result.calculateWinningPrize();
+    }
 }

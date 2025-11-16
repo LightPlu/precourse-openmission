@@ -103,7 +103,8 @@ public class LottoController {
 
         try {
             Map<String, Integer> result = resultService.getRoundResult(round);
-            userOutputView.printRoundResult(round, result);
+            Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
+            userOutputView.printRoundResult(round, result, prizeResult);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

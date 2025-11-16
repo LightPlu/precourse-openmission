@@ -32,12 +32,14 @@ public class UserOutputView {
     }
 
 
-    public void printRoundResult(int roundNumber, Map<String, Integer> results) {
+    public void printRoundResult(int roundNumber, Map<String, Integer> results, Map<String, Long> prizeResult) {
         System.out.println("=== " + roundNumber + "회차 결과 ===");
 
         results.forEach((rankName, count) -> {
-            System.out.println(rankName + " : " + count + "개");
+            System.out.println(rankName + " : " + count + "개" + " | " + prizeResult.get(rankName) + "원");
         });
+
+        System.out.println("당첨금 합산 : " + prizeResult.get("TOTAL"));
 
         System.out.println("=============================");
     }

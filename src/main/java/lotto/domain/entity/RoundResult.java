@@ -1,9 +1,11 @@
 package lotto.domain.entity;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import lotto.domain.vo.Rank;
 
 public class RoundResult {
@@ -23,13 +25,13 @@ public class RoundResult {
     }
 
     public Map<String, Integer> toMap() {
-        return rankResults.entrySet().stream()
-                .collect(
-                        java.util.stream.Collectors.toMap(
-                                entry -> entry.getKey().name(),   // "FIRST", "SECOND"
-                                Map.Entry::getValue
-                        )
-                );
+        return Arrays.stream(Rank.values())
+                .collect(Collectors.toMap(
+                        Rank::name,
+                        rank -> rankResults.getOrDefault(rank, 0),
+                        (a, b) -> a,
+                        LinkedHashMap::new
+                ));
     }
 
     public int getRoundId() {
@@ -40,5 +42,16 @@ public class RoundResult {
         return rankResults;
     }
 
+    public Map<String, Long> calculateWinningPrize() {
+        Map<String, Long> prizes = new LinkedHashMap<>();
+        prizes = rankResults.entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().name(),
+                        entry -> entry.getKey().getPrize() * (long) entry.getValue()
+                ));
+        Long totalPrizes = prizes.values().stream().reduce(0L, Long::sum);
+        prizes.put("TOTAL", totalPrizes);
+        return prizes;
+    }
 
 }
