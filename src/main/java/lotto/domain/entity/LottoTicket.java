@@ -42,4 +42,8 @@ public class LottoTicket {
                         .collect(Collectors.joining(",")))
                 .collect(Collectors.joining(";"));
     }
+
+    public long calculateLottoSize() {
+        return lottos.size();
+    }
 }

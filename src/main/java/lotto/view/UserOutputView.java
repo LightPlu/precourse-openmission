@@ -34,6 +34,7 @@ public class UserOutputView {
 
     public void printRoundResult(int roundNumber, Map<String, Integer> results, Map<String, Long> prizeResult) {
         System.out.println("=== " + roundNumber + "회차 결과 ===");
+        System.out.println("이번 회차에 구매된 로또 갯수 : " + lottoNumber + "\n");
 
         results.forEach((rankName, count) -> {
             System.out.println(rankName + " : " + count + "개" + " | " + prizeResult.get(rankName) + "원");

@@ -2,7 +2,9 @@ package lotto.service;
 
 import static lotto.service.ServiceErrorMessage.NOT_FINISHED_ROUND;
 
+import java.util.List;
 import java.util.Map;
+import lotto.domain.entity.LottoTicket;
 import lotto.domain.entity.RoundResult;
 import lotto.domain.repository.RoundRepository;
 
@@ -26,5 +28,13 @@ public class RoundResultApplicationServiceImpl implements RoundResultApplication
         RoundResult result = roundRepository.findRoundResultByRoundId(roundNumber)
                 .orElseThrow(() -> new RuntimeException(NOT_FINISHED_ROUND.getMessage()));
         return result.calculateWinningPrize();
+    }
+
+    @Override
+    public long calculateLottoSize(int roundNumber) {
+        List<LottoTicket> tickets = roundRepository.findTicketsByRoundId(roundNumber);
+        return tickets.stream()
+                .mapToLong(LottoTicket::calculateLottoSize)
+                .sum();
     }
 }
