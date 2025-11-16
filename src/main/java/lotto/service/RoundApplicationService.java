@@ -9,8 +9,6 @@ public interface RoundApplicationService {
 
     Round startNewRound();
 
-    Round getRoundInfo(int roundNumber);
-
     void closeRoundAndStartNextRound();
 
     List<Integer> findAllRoundNumbers();
