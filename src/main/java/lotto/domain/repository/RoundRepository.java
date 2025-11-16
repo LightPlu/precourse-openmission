@@ -24,7 +24,7 @@ public interface RoundRepository {
 
     Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(int roundId);
 
-    RoundResult saveRoundResult(RoundResult result);
+    void saveRoundResult(RoundResult result);
 
     Optional<RoundResult> findRoundResultByRoundId(int roundId);
 

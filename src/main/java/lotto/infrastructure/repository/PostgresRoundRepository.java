@@ -231,10 +231,10 @@ public class PostgresRoundRepository implements RoundRepository {
     }
 
     @Override
-    public RoundResult saveRoundResult(RoundResult result) {
+    public void saveRoundResult(RoundResult result) {
         String sql = "INSERT INTO round_result (" +
                 "round_id, first, second, third, fourth, fifth, miss" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+                ") VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -249,18 +249,7 @@ public class PostgresRoundRepository implements RoundRepository {
             pstmt.setInt(6, r.get(Rank.FIFTH));
             pstmt.setInt(7, r.get(Rank.MISS));
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    int generatedId = rs.getInt("id");
-                    return RoundResult.of(
-                            generatedId,
-                            result.getRoundId(),
-                            result.getRankResults()
-                    );
-                } else {
-                    throw new RuntimeException("RoundResult 삽입 실패 – id가 반환되지 않았습니다.");
-                }
-            }
+            pstmt.executeQuery();
 
         } catch (SQLException e) {
             throw new RuntimeException("saveRoundResult 실행 실패", e);
