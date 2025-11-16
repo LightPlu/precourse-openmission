@@ -202,3 +202,7 @@
     - 해당 내용은 Clean Architecture 에서 다룬다고 한다. 일지에도 써놨지만 오픈미션 끝나면 한번 읽어봐야겠다. DDD 주도 개발 시작하기 책과 같이 내 궁금증을 잘 긁어줄 책일 것 같다.
     - 근데 다시 생각해보니 굳이 RoundResult 하나때문에 DTO를 따로 만들어야 할까?
       - Map<String, Integer>로 넘기자. 이 생각을 못했다.
+
+
+- 현재 LottoController 에 Switch 문으로 프로그램을 컨트롤 하고 있다. 이걸 어떻게 리팩토링 해야할까?
+  - MenuCommand Enum으로 관리하여 메뉴가 추가되거나 삭제될 때 Enum에서 관리할 수 있도록 하자
