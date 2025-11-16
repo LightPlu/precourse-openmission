@@ -1,13 +1,13 @@
 package lotto.utils;
 
-import static lotto.exceptions.ErrorMessage.INPUT_VALUE_IS_INVALID;
+import static lotto.controller.ApplicationErrorMessage.INPUT_VALUE_IS_INVALID;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class TypeConverter {
 
-    public int priceTypeConvert(String input) {
+    public int convertInt(String input) {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
@@ -20,22 +20,6 @@ public class TypeConverter {
             return Arrays.stream(input.split(","))
                     .map(Integer::parseInt)
                     .toList();
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(INPUT_VALUE_IS_INVALID.getMessage());
-        }
-    }
-
-    public int bonusNumberTypeConvert(String input) {
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(INPUT_VALUE_IS_INVALID.getMessage());
-        }
-    }
-
-    public int menuTypeConvert(String input) {
-        try {
-            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(INPUT_VALUE_IS_INVALID.getMessage());
         }

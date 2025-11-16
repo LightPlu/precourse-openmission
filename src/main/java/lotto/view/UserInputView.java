@@ -17,7 +17,7 @@ public class UserInputView {
     public int printPriceMessage() {
         System.out.println(PRICE_INPUT_MESSAGE);
         String input = Console.readLine();
-        return typeConverter.priceTypeConvert(input);
+        return typeConverter.convertInt(input);
     }
 
     public List<Integer> printWinningNumbersMessage() {
@@ -29,18 +29,18 @@ public class UserInputView {
     public int printBonusNumbersMessage() {
         System.out.println(BONUS_NUMBER_INPUT_MESSAGE);
         String input = Console.readLine();
-        return typeConverter.bonusNumberTypeConvert(input);
+        return typeConverter.convertInt(input);
     }
 
     public int printChoiceMenuMessage() {
         System.out.print(CHOICE_MENU);
         String input = Console.readLine();
-        return typeConverter.menuTypeConvert(input);
+        return typeConverter.convertInt(input);
     }
 
     public int printChoiceRoundNumberMessage() {
         System.out.print(CHOICE_ROUND_NUMBER);
         String input = Console.readLine();
-        return typeConverter.menuTypeConvert(input);
+        return typeConverter.convertInt(input);
     }
 }
