@@ -1,7 +1,9 @@
 package lotto.domain.entity;
 
 import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
+import static lotto.domain.DomainErrorMessage.LOTTO_SIZE_NOT_ALLOWED;
 import static lotto.domain.DomainErrorMessage.WINNING_NUMBER_DUPLICATE_BONUS_NUMBER;
+import static lotto.domain.NumberConstants.LOTTO_NUMBER_SIZE;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 
@@ -16,6 +18,7 @@ public class WinningLottoNumbers {
     private final LottoNumber bonusNumber;
 
     private WinningLottoNumbers(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, int roundId) {
+        validateWinningNumbersSize(winningNumbers);
         validateBonusNumberRange(bonusNumber);
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
@@ -27,6 +30,12 @@ public class WinningLottoNumbers {
 
     public static WinningLottoNumbers of(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, int roundId) {
         return new WinningLottoNumbers(id, winningNumbers, bonusNumber, roundId);
+    }
+
+    private void validateWinningNumbersSize(List<LottoNumber> winningNumbers) {
+        if (winningNumbers.size() != LOTTO_NUMBER_SIZE.getValue()){
+            throw new IllegalArgumentException(LOTTO_SIZE_NOT_ALLOWED.getMessage());
+        }
     }
 
     private void validateBonusNumberRange(LottoNumber bonusNumber) {
@@ -65,7 +74,7 @@ public class WinningLottoNumbers {
     }
 
     public String winningNumbersAsCsv() {
-        return "당첨 번호 : " + winningNumbers.stream()
+        return winningNumbers.stream()
                 .map(n -> String.valueOf(n.getValue()))
                 .collect(Collectors.joining(","));
     }
@@ -73,7 +82,7 @@ public class WinningLottoNumbers {
     public String bonusNumberAsCsv() {
         int bonusNumberValue = bonusNumber.getValue();
 
-        return " 보너스 번호 : " + String.valueOf(bonusNumberValue);
+        return String.valueOf(bonusNumberValue);
     }
 
 }
