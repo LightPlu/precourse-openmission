@@ -1,5 +1,7 @@
 package lotto.controller;
 
+import static lotto.controller.ApplicationErrorMessage.INPUT_VALUE_IS_INVALID;
+
 import java.util.List;
 import java.util.Map;
 import lotto.service.RoundApplicationService;
@@ -33,21 +35,26 @@ public class LottoController {
 
     public void run() {
         while (true) {
-            userOutputView.printMenu();
-            int choice = userInputView.printChoiceMenuMessage();
+            try{
+                userOutputView.printMenu();
+                int choice = userInputView.printChoiceMenuMessage();
 
-            switch (choice) {
-                case 1 -> startNewRound();
-                case 2 -> buyTickets();
-                case 3 -> registerWinningNumbers();
-                case 4 -> closeRound();
-                case 5 -> showRoundResult();
-                case 0 -> {
-                    System.out.println("프로그램 종료");
-                    return;
+                switch (choice) {
+                    case 1 -> startNewRound();
+                    case 2 -> buyTickets();
+                    case 3 -> registerWinningNumbers();
+                    case 4 -> closeRound();
+                    case 5 -> showRoundResult();
+                    case 0 -> {
+                        System.out.println("프로그램 종료");
+                        return;
+                    }
+                    default -> System.out.println(INPUT_VALUE_IS_INVALID.getMessage());
                 }
-                default -> System.out.println("[ERROR] 잘못된 입력");
+            } catch (Exception e){
+                System.out.println(e.getMessage());
             }
+
         }
     }
 
@@ -61,7 +68,7 @@ public class LottoController {
         try {
             ticketService.buyTicketsAndSave(money);
         } catch (Exception e) {
-            System.out.println("[ERROR] " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -71,10 +78,10 @@ public class LottoController {
                 List<Integer> winningNumbers = userInputView.printWinningNumbersMessage();
                 int bonus = userInputView.printBonusNumbersMessage();
 
-
                 winningService.saveWinningNumbers(winningNumbers, bonus);
+                break;
             } catch (Exception e) {
-                System.out.println("[ERROR] " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -85,7 +92,7 @@ public class LottoController {
         try {
             roundService.closeRoundAndStartNextRound();
         } catch (Exception e) {
-            System.out.println("[ERROR] " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -98,7 +105,7 @@ public class LottoController {
             Map<String, Integer> result = resultService.getRoundResult(round);
             userOutputView.printRoundResult(round, result);
         } catch (Exception e) {
-            System.out.println("[ERROR] " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -1,5 +1,7 @@
 package lotto.service;
 
+import static lotto.service.ServiceErrorMessage.NO_ROUND;
+
 import java.util.List;
 import lotto.domain.entity.LottoTicket;
 import lotto.domain.entity.Round;
@@ -24,7 +26,7 @@ public class TicketApplicationServiceImpl implements TicketApplicationService {
         List<List<Lotto>> purchased = lottoPurchaseService.purchase(cash);
 
         Round round = roundRepository.findLatestRound()
-                .orElseThrow(() -> new IllegalStateException("해당 회차가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
 
         int roundId = round.getId();  // PK 가져오기
 

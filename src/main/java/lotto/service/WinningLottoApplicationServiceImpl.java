@@ -1,5 +1,9 @@
 package lotto.service;
 
+import static lotto.service.ServiceErrorMessage.NOT_REGISTERED_WINNING_NUMBERS;
+import static lotto.service.ServiceErrorMessage.NO_ROUND;
+import static lotto.service.ServiceErrorMessage.REGISTERED_WINNING_NUMBERS;
+
 import java.util.List;
 import lotto.domain.entity.Round;
 import lotto.domain.entity.WinningLottoNumbers;
@@ -19,13 +23,13 @@ public class WinningLottoApplicationServiceImpl implements WinningLottoApplicati
 
         // 1) 회차 조회
         Round round = roundRepository.findLatestRound()
-                .orElseThrow(() -> new IllegalStateException("해당 회차가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
 
         int roundId = round.getId();
 
         // 2) 이미 당첨 번호가 존재하는지 검사
         if (roundRepository.findWinningLottoNumbersByRoundId(roundId).isPresent()) {
-            throw new IllegalStateException("이미 당첨 번호가 등록된 회차입니다.");
+            throw new IllegalStateException(REGISTERED_WINNING_NUMBERS.getMessage());
         }
 
         // 3) LottoNumber, Lotto 도메인 방식으로 변환
@@ -51,6 +55,6 @@ public class WinningLottoApplicationServiceImpl implements WinningLottoApplicati
     public WinningLottoNumbers getWinningNumbers(int roundNumber) {
 
         return roundRepository.findWinningLottoNumbersByRoundId(roundNumber)
-                .orElseThrow(() -> new IllegalStateException("당첨번호가 등록되지 않았습니다."));
+                .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
     }
 }

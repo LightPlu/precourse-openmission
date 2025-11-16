@@ -1,9 +1,9 @@
 package lotto.domain.vo;
 
+import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_IS_NOT_DUPLICATE;
+import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
-import static lotto.exceptions.ErrorMessage.LOTTO_NUMBER_IS_NOT_DUPLICATE;
-import static lotto.exceptions.ErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,5 +1,9 @@
 package lotto.service;
 
+import static lotto.service.ServiceErrorMessage.NOT_REGISTERED_WINNING_NUMBERS;
+import static lotto.service.ServiceErrorMessage.NO_ROUND;
+import static lotto.service.ServiceErrorMessage.NO_TICKETS;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +21,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     private final LottoCompareService lottoCompareService;
     private final RoundRepository roundRepository;
 
-    public RoundApplicationServiceImpl(RoundRepository roundRepository,  LottoCompareService lottoCompareService) {
+    public RoundApplicationServiceImpl(RoundRepository roundRepository, LottoCompareService lottoCompareService) {
         this.lottoCompareService = lottoCompareService;
         this.roundRepository = roundRepository;
     }
@@ -25,7 +29,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     @Override
     public int getLatestRound() {
         Round round = roundRepository.findLatestRound()
-                .orElseThrow(() -> new IllegalStateException("아직 생성된 회차가 없습니다."));
+                .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
         return round.getRoundNumber();
     }
 
@@ -40,12 +44,6 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     }
 
     @Override
-    public Round getRoundInfo(int roundNumber) {
-        return roundRepository.findByRoundNumber(roundNumber)
-                .orElseThrow(() -> new IllegalStateException("해당 회차가 존재하지 않습니다: " + roundNumber));
-    }
-
-    @Override
     public void closeRoundAndStartNextRound() {
 
         // 1) 현재 회차 조회
@@ -56,17 +54,19 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
                 roundRepository.findTicketsByRoundId(roundId);
 
         if (tickets.isEmpty()) {
-            throw new IllegalStateException("이번 회차에 발행된 티켓이 없습니다.");
+            throw new IllegalStateException(NO_TICKETS.getMessage());
         }
 
         // 3) 당첨 번호 조회
         WinningLottoNumbers winning =
                 roundRepository.findWinningLottoNumbersByRoundId(roundId)
-                        .orElseThrow(() -> new IllegalStateException("당첨 번호가 등록되지 않았습니다."));
+                        .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
 
         // 4) Rank별 count 계산
         Map<Rank, Integer> counts = new EnumMap<>(Rank.class);
-        for (Rank r : Rank.values()) counts.put(r, 0);
+        for (Rank r : Rank.values()) {
+            counts.put(r, 0);
+        }
 
         for (LottoTicket ticket : tickets) {
             List<PrizeDetail> details =
@@ -81,7 +81,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
         }
 
         // 5) 결과 저장
-        RoundResult result = RoundResult.of(0 ,roundId, counts);
+        RoundResult result = RoundResult.of(0, roundId, counts);
         RoundResult savedResult = roundRepository.saveRoundResult(result);
 
         // 6) 다음 회차 생성
