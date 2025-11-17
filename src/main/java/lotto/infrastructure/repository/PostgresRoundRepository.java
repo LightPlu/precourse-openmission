@@ -249,7 +249,7 @@ public class PostgresRoundRepository implements RoundRepository {
             pstmt.setInt(6, r.get(Rank.FIFTH));
             pstmt.setInt(7, r.get(Rank.MISS));
 
-            pstmt.executeQuery();
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("saveRoundResult 실행 실패", e);
