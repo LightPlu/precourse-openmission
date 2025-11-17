@@ -28,12 +28,13 @@ public class WinningLottoNumbers {
         this.roundId = roundId;
     }
 
-    public static WinningLottoNumbers of(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber, int roundId) {
+    public static WinningLottoNumbers of(int id, List<LottoNumber> winningNumbers, LottoNumber bonusNumber,
+                                         int roundId) {
         return new WinningLottoNumbers(id, winningNumbers, bonusNumber, roundId);
     }
 
     private void validateWinningNumbersSize(List<LottoNumber> winningNumbers) {
-        if (winningNumbers.size() != LOTTO_NUMBER_SIZE.getValue()){
+        if (winningNumbers.size() != LOTTO_NUMBER_SIZE.getValue()) {
             throw new IllegalArgumentException(LOTTO_SIZE_NOT_ALLOWED.getMessage());
         }
     }

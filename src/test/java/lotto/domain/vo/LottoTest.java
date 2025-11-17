@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LottoTest {

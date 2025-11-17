@@ -38,7 +38,7 @@ class WinningLottoApplicationServiceImplTest {
 
         when(roundRepository.findLatestRound()).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1,2,3,4,5,6), 7))
+        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(NO_ROUND.getMessage());
     }
@@ -51,7 +51,7 @@ class WinningLottoApplicationServiceImplTest {
         when(roundRepository.findWinningLottoNumbersByRoundId(3))
                 .thenReturn(Optional.of(mock(WinningLottoNumbers.class)));
 
-        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1,2,3,4,5,6), 7))
+        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(REGISTERED_WINNING_NUMBERS.getMessage());
     }
@@ -85,7 +85,7 @@ class WinningLottoApplicationServiceImplTest {
     void getWinningNumbers_success() {
         WinningLottoNumbers w = WinningLottoNumbers.of(
                 0,
-                nums(List.of(1,2,3,4,5,6)),
+                nums(List.of(1, 2, 3, 4, 5, 6)),
                 LottoNumber.of(10),
                 7
         );

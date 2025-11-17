@@ -260,12 +260,12 @@ public class PostgresRoundRepository implements RoundRepository {
     private Map<Rank, Integer> buildRankResults(ResultSet rs) throws SQLException {
         Map<Rank, Integer> map = new EnumMap<>(Rank.class);
 
-        map.put(Rank.FIRST,  rs.getInt("first"));
+        map.put(Rank.FIRST, rs.getInt("first"));
         map.put(Rank.SECOND, rs.getInt("second"));
-        map.put(Rank.THIRD,  rs.getInt("third"));
+        map.put(Rank.THIRD, rs.getInt("third"));
         map.put(Rank.FOURTH, rs.getInt("fourth"));
-        map.put(Rank.FIFTH,  rs.getInt("fifth"));
-        map.put(Rank.MISS,   rs.getInt("miss"));
+        map.put(Rank.FIFTH, rs.getInt("fifth"));
+        map.put(Rank.MISS, rs.getInt("miss"));
 
         return map;
     }

@@ -4,7 +4,7 @@ import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
 import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
 
-public class LottoNumber implements Comparable<LottoNumber>{
+public class LottoNumber implements Comparable<LottoNumber> {
     private final int value;
 
     private LottoNumber(int value) {

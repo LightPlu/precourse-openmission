@@ -34,13 +34,13 @@ public class LottoController {
 
     public void run() {
         while (running) {
-            try{
+            try {
                 userOutputView.printMenu();
                 int choice = userInputView.printChoiceMenuMessage();
 
                 MenuCommand menuCommand = MenuCommand.from(choice);
                 menuCommand.execute(this);
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -57,14 +57,14 @@ public class LottoController {
     }
 
     public void registerWinningNumbers() {
-            try {
-                List<Integer> winningNumbers = userInputView.printWinningNumbersMessage();
-                int bonus = userInputView.printBonusNumbersMessage();
+        try {
+            List<Integer> winningNumbers = userInputView.printWinningNumbersMessage();
+            int bonus = userInputView.printBonusNumbersMessage();
 
-                winningService.saveWinningNumbers(winningNumbers, bonus);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            winningService.saveWinningNumbers(winningNumbers, bonus);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 

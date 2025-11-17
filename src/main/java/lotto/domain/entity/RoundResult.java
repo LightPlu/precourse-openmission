@@ -14,7 +14,7 @@ public class RoundResult {
     private final int roundId;
     private final Map<Rank, Integer> rankResults;
 
-    private RoundResult(int id ,int roundId, Map<Rank, Integer> rankResults) {
+    private RoundResult(int id, int roundId, Map<Rank, Integer> rankResults) {
         this.id = id;
         this.roundId = roundId;
         this.rankResults = Collections.unmodifiableMap(new EnumMap<>(rankResults));

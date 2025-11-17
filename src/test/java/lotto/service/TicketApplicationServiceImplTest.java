@@ -48,8 +48,8 @@ class TicketApplicationServiceImplTest {
                 .thenReturn(new Round(1, 1));
 
         List<List<Lotto>> purchased = List.of(
-                List.of(lotto(List.of(1,2,3,4,5,6))),
-                List.of(lotto(List.of(7,8,9,10,11,12)))
+                List.of(lotto(List.of(1, 2, 3, 4, 5, 6))),
+                List.of(lotto(List.of(7, 8, 9, 10, 11, 12)))
         );
 
         when(lottoPurchaseService.purchase(any(Cash.class)))
@@ -69,8 +69,8 @@ class TicketApplicationServiceImplTest {
         when(roundRepository.findLatestRound()).thenReturn(Optional.of(existingRound));
 
         List<List<Lotto>> purchased = List.of(
-                List.of(lotto(List.of(1,2,3,4,5,6))),
-                List.of(lotto(List.of(7,8,9,10,11,12)))
+                List.of(lotto(List.of(1, 2, 3, 4, 5, 6))),
+                List.of(lotto(List.of(7, 8, 9, 10, 11, 12)))
         );
         when(lottoPurchaseService.purchase(any(Cash.class)))
                 .thenReturn(purchased);
@@ -88,7 +88,7 @@ class TicketApplicationServiceImplTest {
         when(roundRepository.findLatestRound()).thenReturn(Optional.of(existing));
 
         List<List<Lotto>> purchased = List.of(
-                List.of(lotto(List.of(1,2,3,4,5,6)))
+                List.of(lotto(List.of(1, 2, 3, 4, 5, 6)))
         );
 
         when(lottoPurchaseService.purchase(any()))
