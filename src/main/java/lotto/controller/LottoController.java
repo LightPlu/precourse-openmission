@@ -81,16 +81,23 @@ public class LottoController {
         List<Integer> roundNumbers = roundService.findAllRoundNumbers();
         userOutputView.printExistRound(roundNumbers);
         int roundNumber = userInputView.printChoiceRoundNumberMessage();
+        if (roundNumber == 0) {
+            return;
+        }
         int round = roundService.findRoundIdByRoundNumber(roundNumber);
         try {
-            Map<String, Integer> result = resultService.getRoundResult(round);
-            Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
-            long lottoNumber = resultService.calculateLottoSize(round);
-            String winningNumbers = winningService.getWinningNumbers(round);
-            userOutputView.printRoundResult(round, result, prizeResult, lottoNumber, winningNumbers);
+            aggregateMethod(round);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void aggregateMethod(int round) {
+        Map<String, Integer> result = resultService.getRoundResult(round);
+        Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
+        long lottoNumber = resultService.calculateLottoSize(round);
+        String winningNumbers = winningService.getWinningNumbers(round);
+        userOutputView.printRoundResult(round, result, prizeResult, lottoNumber, winningNumbers);
     }
 
     public void stop() {

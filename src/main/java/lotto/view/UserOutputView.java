@@ -18,6 +18,7 @@ public class UserOutputView {
     public void printExistRound(List<Integer> roundNumbers) {
 
         System.out.println("\n===== 현재 존재하는 회차 목록 =====");
+        System.out.println("종료 : 0");
         if (roundNumbers.isEmpty()) {
             System.out.println("▶ 등록된 회차가 없습니다.");
             System.out.println("=================================\n");
