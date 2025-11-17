@@ -19,7 +19,12 @@ repositories {
 dependencies {
     implementation 'com.github.woowacourse-projects:mission-utils:1.2.0'
     implementation 'org.postgresql:postgresql:42.7.2'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 }
+
+
 
 test {
     useJUnitPlatform()
