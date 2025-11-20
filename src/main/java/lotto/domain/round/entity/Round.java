@@ -1,11 +1,16 @@
 package lotto.domain.round.entity;
 
 import java.util.Objects;
+import lotto.domain.round.vo.RoundResult;
+import lotto.domain.round.vo.WinningLottoNumbers;
 
 public class Round {
 
     private final int id;
     private final int roundNumber;
+
+    private WinningLottoNumbers winningLottoNumbers;
+    private RoundResult roundResult;
 
     public Round(int id, int roundNumber) {
         this.id = id;
@@ -22,6 +27,23 @@ public class Round {
 
     public int getRoundNumber() {
         return roundNumber;
+    }
+
+    public void registerWinningNumbers(WinningLottoNumbers winningNumbers) {
+        if (this.winningLottoNumbers != null) {
+            throw new IllegalStateException("이미 당첨 번호가 등록된 Round입니다.");
+        }
+        this.winningLottoNumbers = winningNumbers;
+    }
+
+    public void registerRoundResult(RoundResult result) {
+        if (this.winningLottoNumbers == null) {
+            throw new IllegalStateException("당첨 번호 없이 결과를 등록할 수 없습니다.");
+        }
+        if (this.roundResult != null) {
+            throw new IllegalStateException("이미 결과가 등록된 Round입니다.");
+        }
+        this.roundResult = result;
     }
 
     @Override
