@@ -1,12 +1,12 @@
 package lotto.domain.vo;
 
-import static lotto.domain.DomainErrorMessage.CASH_IS_NOT_DIVISIBLE;
-import static lotto.domain.DomainErrorMessage.CASH_IS_NOT_POSITIVE;
-import static lotto.domain.DomainErrorMessage.CASH_RANGE_OUT;
-import static lotto.domain.NumberConstants.LOTTO_GAME_MAX_PURCHASE;
-import static lotto.domain.NumberConstants.LOTTO_PURCHASE_MAX_MONEY;
-import static lotto.domain.NumberConstants.LOTTO_PRICE;
-import static lotto.domain.NumberConstants.ZERO;
+import static lotto.domain.common.DomainErrorMessage.CASH_IS_NOT_DIVISIBLE;
+import static lotto.domain.common.DomainErrorMessage.CASH_IS_NOT_POSITIVE;
+import static lotto.domain.common.DomainErrorMessage.CASH_RANGE_OUT;
+import static lotto.domain.common.NumberConstants.LOTTO_GAME_MAX_PURCHASE;
+import static lotto.domain.common.NumberConstants.LOTTO_PURCHASE_MAX_MONEY;
+import static lotto.domain.common.NumberConstants.LOTTO_PRICE;
+import static lotto.domain.common.NumberConstants.ZERO;
 
 public class Cash {
     private final int money;

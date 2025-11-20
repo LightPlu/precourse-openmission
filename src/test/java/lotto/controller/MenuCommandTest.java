@@ -3,6 +3,8 @@ package lotto.controller;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import lotto.presentation.controller.LottoController;
+import lotto.presentation.controller.MenuCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

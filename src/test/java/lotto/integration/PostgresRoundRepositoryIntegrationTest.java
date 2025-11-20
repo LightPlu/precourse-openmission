@@ -1,10 +1,13 @@
 package lotto.integration;
 
-import lotto.domain.entity.*;
-import lotto.domain.repository.RoundRepository;
+import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.round.entity.Round;
+import lotto.domain.round.vo.RoundResult;
+import lotto.domain.round.vo.WinningLottoNumbers;
+import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.service.LottoCompareService;
-import lotto.domain.vo.Lotto;
-import lotto.domain.vo.LottoNumber;
+import lotto.domain.lottoTicket.vo.Lotto;
+import lotto.domain.lottoTicket.vo.LottoNumber;
 import lotto.domain.vo.Rank;
 import lotto.infrastructure.db.DBConnectionManager;
 import lotto.infrastructure.repository.PostgresRoundRepository;

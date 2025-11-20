@@ -1,16 +1,15 @@
 package lotto.domain.vo;
 
-import static lotto.domain.DomainErrorMessage.CASH_IS_NOT_DIVISIBLE;
-import static lotto.domain.DomainErrorMessage.CASH_IS_NOT_POSITIVE;
-import static lotto.domain.DomainErrorMessage.CASH_RANGE_OUT;
-import static lotto.domain.NumberConstants.LOTTO_PURCHASE_MAX_MONEY;
+import static lotto.domain.common.DomainErrorMessage.CASH_IS_NOT_DIVISIBLE;
+import static lotto.domain.common.DomainErrorMessage.CASH_IS_NOT_POSITIVE;
+import static lotto.domain.common.DomainErrorMessage.CASH_RANGE_OUT;
+import static lotto.domain.common.NumberConstants.LOTTO_PURCHASE_MAX_MONEY;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.provider.ValueSources;
 
 class CashTest {
 

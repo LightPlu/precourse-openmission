@@ -1,11 +1,12 @@
 package lotto.domain.service;
 
-import static lotto.domain.NumberConstants.LOTTO_END_NUMBER;
-import static lotto.domain.NumberConstants.LOTTO_NUMBER_SIZE;
-import static lotto.domain.NumberConstants.LOTTO_START_NUMBER;
+import static lotto.domain.common.NumberConstants.LOTTO_END_NUMBER;
+import static lotto.domain.common.NumberConstants.LOTTO_NUMBER_SIZE;
+import static lotto.domain.common.NumberConstants.LOTTO_START_NUMBER;
 
 import java.util.List;
-import lotto.domain.vo.LottoNumber;
+import lotto.domain.lottoTicket.vo.LottoNumber;
+import lotto.infrastructure.RandomNumberGenerator;
 
 public class LottoNumberGenerator {
 

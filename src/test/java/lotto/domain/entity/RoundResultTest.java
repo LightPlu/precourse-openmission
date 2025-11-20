@@ -1,6 +1,7 @@
 package lotto.domain.entity;
 
 import java.util.LinkedHashMap;
+import lotto.domain.round.vo.RoundResult;
 import lotto.domain.vo.Rank;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

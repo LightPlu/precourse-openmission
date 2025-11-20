@@ -2,7 +2,6 @@ package lotto.infrastructure;
 
 import camp.nextstep.edu.missionutils.Randoms;
 import java.util.List;
-import lotto.domain.service.RandomNumberGenerator;
 
 public class RandomNumberGeneratorImpl implements RandomNumberGenerator {
 

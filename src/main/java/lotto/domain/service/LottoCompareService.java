@@ -3,11 +3,11 @@ package lotto.domain.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lotto.domain.entity.LottoTicket;
-import lotto.domain.vo.Lotto;
-import lotto.domain.vo.CountResult;
-import lotto.domain.entity.WinningLottoNumbers;
-import lotto.domain.vo.LottoNumber;
+import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.vo.Lotto;
+import lotto.domain.round.vo.CountResult;
+import lotto.domain.round.vo.WinningLottoNumbers;
+import lotto.domain.lottoTicket.vo.LottoNumber;
 import lotto.domain.vo.Rank;
 
 public class LottoCompareService {

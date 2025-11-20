@@ -1,7 +1,7 @@
 package lotto;
 
 import lotto.config.ApplicationConfig;
-import lotto.controller.LottoController;
+import lotto.presentation.controller.LottoController;
 
 public class Application {
     public static void main(String[] args) {

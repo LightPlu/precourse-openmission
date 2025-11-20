@@ -1,12 +1,13 @@
 package lotto.domain.entity;
 
-import lotto.domain.vo.LottoNumber;
+import lotto.domain.round.vo.WinningLottoNumbers;
+import lotto.domain.lottoTicket.vo.LottoNumber;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static lotto.domain.DomainErrorMessage.*;
+import static lotto.domain.common.DomainErrorMessage.*;
 import static org.assertj.core.api.Assertions.*;
 
 class WinningLottoNumbersTest {

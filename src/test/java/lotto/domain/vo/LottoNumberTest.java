@@ -1,9 +1,10 @@
 package lotto.domain.vo;
 
-import static lotto.domain.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
+import static lotto.domain.common.DomainErrorMessage.LOTTO_NUMBER_OUT_OF_BOUNDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import lotto.domain.lottoTicket.vo.LottoNumber;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

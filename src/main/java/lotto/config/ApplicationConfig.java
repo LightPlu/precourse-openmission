@@ -1,14 +1,14 @@
 package lotto.config;
 
-import lotto.controller.LottoController;
-import lotto.domain.repository.RoundRepository;
+import lotto.presentation.controller.LottoController;
+import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.service.LottoCompareService;
-import lotto.domain.service.LottoPurchaseService;
+import lotto.application.LottoPurchaseService;
 import lotto.domain.service.LottoNumberGenerator;
-import lotto.domain.service.RandomNumberGenerator;
+import lotto.infrastructure.RandomNumberGenerator;
 import lotto.infrastructure.RandomNumberGeneratorImpl;
 import lotto.infrastructure.repository.PostgresRoundRepository;
-import lotto.service.*;
+import lotto.application.*;
 
 public class ApplicationConfig {
 
