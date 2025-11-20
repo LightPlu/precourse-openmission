@@ -1,5 +1,7 @@
 package lotto.config;
 
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
+import lotto.infrastructure.repository.PostgresLottoTicketRepository;
 import lotto.presentation.controller.LottoController;
 import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.service.LottoCompareService;
@@ -15,6 +17,7 @@ public class ApplicationConfig {
     public LottoController lottoController() {
 
         RoundRepository roundRepository = new PostgresRoundRepository();
+        LottoTicketRepository lottoTicketRepository = new PostgresLottoTicketRepository();
 
         RandomNumberGenerator generator = new RandomNumberGeneratorImpl();
         LottoNumberGenerator domainGenerator = new LottoNumberGenerator(generator);
@@ -23,16 +26,16 @@ public class ApplicationConfig {
         LottoCompareService compareService = new LottoCompareService();
 
         RoundApplicationService roundService =
-                new RoundApplicationServiceImpl(roundRepository, compareService);
+                new RoundApplicationServiceImpl(lottoTicketRepository, roundRepository, compareService);
 
         TicketApplicationService ticketService =
-                new TicketApplicationServiceImpl(roundRepository, purchaseService);
+                new TicketApplicationServiceImpl(lottoTicketRepository, roundRepository, purchaseService);
 
         WinningLottoApplicationService winningService =
                 new WinningLottoApplicationServiceImpl(roundRepository);
 
         RoundResultApplicationService resultService =
-                new RoundResultApplicationServiceImpl(roundRepository);
+                new RoundResultApplicationServiceImpl(lottoTicketRepository, roundRepository);
 
         return new LottoController(
                 roundService,

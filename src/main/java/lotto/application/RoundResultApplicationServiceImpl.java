@@ -5,14 +5,19 @@ import static lotto.application.common.ServiceErrorMessage.NOT_FINISHED_ROUND;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.repository.RoundRepository;
 
 public class RoundResultApplicationServiceImpl implements RoundResultApplicationService {
 
-    private RoundRepository roundRepository;
+    private final RoundRepository roundRepository;
+    private final LottoTicketRepository lottoTicketRepository;
 
-    public RoundResultApplicationServiceImpl(RoundRepository roundRepository) {
+    public RoundResultApplicationServiceImpl(
+            LottoTicketRepository lottoTicketRepository,
+            RoundRepository roundRepository) {
+        this.lottoTicketRepository = lottoTicketRepository;
         this.roundRepository = roundRepository;
     }
 
@@ -32,7 +37,7 @@ public class RoundResultApplicationServiceImpl implements RoundResultApplication
 
     @Override
     public long calculateLottoSize(int roundNumber) {
-        List<LottoTicket> tickets = roundRepository.findTicketsByRoundId(roundNumber);
+        List<LottoTicket> tickets = lottoTicketRepository.findTicketsByRoundId(roundNumber);
         return tickets.stream()
                 .mapToLong(LottoTicket::calculateLottoSize)
                 .sum();

@@ -2,6 +2,7 @@ package lotto.application;
 
 import java.util.List;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.vo.Cash;
@@ -9,12 +10,17 @@ import lotto.domain.lottoTicket.vo.Lotto;
 
 public class TicketApplicationServiceImpl implements TicketApplicationService {
 
+    private final LottoTicketRepository lottoTicketRepository;
     private final RoundRepository roundRepository;
     private final LottoPurchaseService lottoPurchaseService;
 
-    public TicketApplicationServiceImpl(RoundRepository roundRepository, LottoPurchaseService lottoPurchaseService) {
-        this.lottoPurchaseService = lottoPurchaseService;
+    public TicketApplicationServiceImpl(
+            LottoTicketRepository lottoTicketRepository,
+            RoundRepository roundRepository,
+            LottoPurchaseService lottoPurchaseService) {
+        this.lottoTicketRepository = lottoTicketRepository;
         this.roundRepository = roundRepository;
+        this.lottoPurchaseService = lottoPurchaseService;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class TicketApplicationServiceImpl implements TicketApplicationService {
                         .map(lottos -> LottoTicket.of(roundId, lottos))
                         .toList();
 
-        roundRepository.saveTickets(tickets);
+        lottoTicketRepository.saveTickets(tickets);
     }
 
     private Round checkOrCreateRound() {

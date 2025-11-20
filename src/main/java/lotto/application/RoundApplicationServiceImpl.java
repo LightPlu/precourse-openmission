@@ -8,6 +8,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.vo.WinningLottoNumbers;
@@ -19,10 +20,15 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
 
     private final LottoCompareService lottoCompareService;
     private final RoundRepository roundRepository;
+    private final LottoTicketRepository lottoTicketRepository;
 
-    public RoundApplicationServiceImpl(RoundRepository roundRepository, LottoCompareService lottoCompareService) {
+    public RoundApplicationServiceImpl(
+            LottoTicketRepository lottoTicketRepository,
+            RoundRepository roundRepository,
+            LottoCompareService lottoCompareService) {
         this.lottoCompareService = lottoCompareService;
         this.roundRepository = roundRepository;
+        this.lottoTicketRepository = lottoTicketRepository;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
         RoundResult result = RoundResult.of(
                 0,
                 roundId,
-                aggregateRankCounts(roundRepository.findTicketsByRoundId(roundId), winning)
+                aggregateRankCounts(lottoTicketRepository.findTicketsByRoundId(roundId), winning)
         );
         roundRepository.saveRoundResult(result);
         startNewRound();
@@ -88,7 +94,7 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
 
     private int getValidRoundIdWithTickets() {
         int roundId = getLatestRound();
-        List<LottoTicket> tickets = roundRepository.findTicketsByRoundId(roundId);
+        List<LottoTicket> tickets = lottoTicketRepository.findTicketsByRoundId(roundId);
 
         if (tickets.isEmpty()) {
             throw new IllegalStateException(NO_TICKETS.getMessage());
