@@ -1,5 +1,7 @@
 package lotto.application;
 
+import lotto.application.lottoService.LottoPurchaseService;
+import lotto.application.lottoService.TicketApplicationServiceImpl;
 import lotto.domain.lottoTicket.entity.LottoTicket;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.repository.RoundRepository;

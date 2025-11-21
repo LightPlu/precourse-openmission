@@ -1,6 +1,6 @@
 package lotto.presentation.view.utils;
 
-import static lotto.presentation.controller.ApplicationErrorMessage.INPUT_VALUE_IS_INVALID;
+import static lotto.presentation.controller.common.ApplicationErrorMessage.INPUT_VALUE_IS_INVALID;
 
 import java.util.Arrays;
 import java.util.List;

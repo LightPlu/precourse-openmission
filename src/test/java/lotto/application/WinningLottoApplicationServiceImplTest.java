@@ -1,5 +1,6 @@
 package lotto.application;
 
+import lotto.application.roundService.WinningLottoApplicationServiceImpl;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.WinningLottoNumbers;
 import lotto.domain.round.repository.RoundRepository;

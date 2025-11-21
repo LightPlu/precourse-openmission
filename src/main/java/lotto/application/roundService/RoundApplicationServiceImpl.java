@@ -1,4 +1,4 @@
-package lotto.application;
+package lotto.application.roundService;
 
 import static lotto.application.common.ServiceErrorMessage.NOT_REGISTERED_WINNING_NUMBERS;
 import static lotto.application.common.ServiceErrorMessage.NO_ROUND;

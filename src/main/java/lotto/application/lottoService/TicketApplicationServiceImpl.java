@@ -1,4 +1,4 @@
-package lotto.application;
+package lotto.application.lottoService;
 
 import java.util.List;
 import lotto.domain.lottoTicket.entity.LottoTicket;

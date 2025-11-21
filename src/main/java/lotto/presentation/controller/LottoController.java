@@ -1,13 +1,11 @@
 package lotto.presentation.controller;
 
-import static lotto.application.common.ServiceErrorMessage.NOT_FINISHED_ROUND;
-
 import java.util.List;
 import java.util.Map;
-import lotto.application.RoundApplicationService;
-import lotto.application.RoundResultApplicationService;
-import lotto.application.TicketApplicationService;
-import lotto.application.WinningLottoApplicationService;
+import lotto.application.roundService.RoundApplicationService;
+import lotto.application.roundService.RoundResultApplicationService;
+import lotto.application.lottoService.TicketApplicationService;
+import lotto.application.roundService.WinningLottoApplicationService;
 import lotto.presentation.view.UserInputView;
 import lotto.presentation.view.UserOutputView;
 

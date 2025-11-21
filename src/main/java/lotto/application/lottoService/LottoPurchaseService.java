@@ -1,4 +1,4 @@
-package lotto.application;
+package lotto.application.lottoService;
 
 import static lotto.domain.common.NumberConstants.LOTTO_GAME_MAX_PURCHASE;
 import static lotto.domain.common.NumberConstants.ZERO;

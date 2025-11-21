@@ -1,4 +1,4 @@
-package lotto.presentation.controller;
+package lotto.presentation.controller.common;
 
 public enum ApplicationErrorMessage {
     INPUT_VALUE_IS_INVALID("[ERROR] 메뉴 선택 번호를 정확히 입력해주세요.");
