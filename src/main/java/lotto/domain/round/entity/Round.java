@@ -46,6 +46,17 @@ public class Round {
         this.roundResult = result;
     }
 
+    public WinningLottoNumbers getWinningLottoNumbers() {
+        return winningLottoNumbers;
+    }
+
+    public RoundResult getRoundResult() {
+        if (roundResult == null) {
+            throw new IllegalStateException("아직 종료되지 않은 회차입니다.");
+        }
+        return roundResult;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
