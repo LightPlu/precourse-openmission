@@ -1,6 +1,7 @@
 package lotto.integration;
 
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.vo.WinningLottoNumbers;
@@ -10,6 +11,7 @@ import lotto.domain.lottoTicket.vo.Lotto;
 import lotto.domain.lottoTicket.vo.LottoNumber;
 import lotto.domain.vo.Rank;
 import lotto.infrastructure.db.DBConnectionManager;
+import lotto.infrastructure.repository.PostgresLottoTicketRepository;
 import lotto.infrastructure.repository.PostgresRoundRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -23,6 +25,7 @@ public class PostgresRoundRepositoryIntegrationTest {
 
     private PostgreSQLContainer<?> postgres;
     private RoundRepository roundRepository;
+    private LottoTicketRepository lottoTicketRepository;
 
     @BeforeAll
     void setup() {
@@ -42,6 +45,7 @@ public class PostgresRoundRepositoryIntegrationTest {
         );
 
         roundRepository = new PostgresRoundRepository();
+        lottoTicketRepository = new PostgresLottoTicketRepository();
 
     }
 
@@ -68,7 +72,7 @@ public class PostgresRoundRepositoryIntegrationTest {
         ));
 
         LottoTicket ticket = LottoTicket.of(roundId, List.of(lotto));
-        roundRepository.saveTickets(List.of(ticket));
+        lottoTicketRepository.saveTickets(List.of(ticket));
 
         // 3) Winning Number 저장
         WinningLottoNumbers winning = WinningLottoNumbers.of(
@@ -95,10 +99,12 @@ public class PostgresRoundRepositoryIntegrationTest {
         RoundResult result = RoundResult.of(0, roundId, counts);
         roundRepository.saveRoundResult(result);
 
-        // 5) DB에서 RoundResult 다시 조회
-        RoundResult loaded = roundRepository
-                .findRoundResultByRoundId(roundId)
+        // 5) DB에서 Round 다시 조회
+        Round loadedRound = roundRepository
+                .findByRoundId(roundId)
                 .orElseThrow();
+
+        RoundResult loaded = loadedRound.getRoundResult();
 
         Assertions.assertThat(loaded.getRoundId()).isEqualTo(roundId);
         Assertions.assertThat(loaded.getRankResults()).isEqualTo(counts);
