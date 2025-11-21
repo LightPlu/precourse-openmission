@@ -1,8 +1,7 @@
-package lotto.application;
+package lotto.application.lottoService;
 
-import lotto.application.lottoService.LottoPurchaseService;
-import lotto.application.lottoService.TicketApplicationServiceImpl;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.vo.Cash;
@@ -21,14 +20,16 @@ import static org.mockito.Mockito.*;
 class TicketApplicationServiceImplTest {
 
     private RoundRepository roundRepository;
+    private LottoTicketRepository lottoTicketRepository;
     private LottoPurchaseService lottoPurchaseService;
     private TicketApplicationServiceImpl service;
 
     @BeforeEach
     void setUp() {
         roundRepository = mock(RoundRepository.class);
+        lottoTicketRepository = mock(LottoTicketRepository.class);
         lottoPurchaseService = mock(LottoPurchaseService.class);
-        service = new TicketApplicationServiceImpl(roundRepository, lottoPurchaseService);
+        service = new TicketApplicationServiceImpl(lottoTicketRepository, roundRepository, lottoPurchaseService);
     }
 
     private Lotto lotto(List<Integer> nums) {
@@ -59,7 +60,7 @@ class TicketApplicationServiceImplTest {
         service.buyTicketsAndSave(5000);
 
         verify(roundRepository).saveRound(any(Round.class));
-        verify(roundRepository).saveTickets(anyList());
+        verify(lottoTicketRepository).saveTickets(anyList());
     }
 
     @Test
@@ -79,7 +80,7 @@ class TicketApplicationServiceImplTest {
         service.buyTicketsAndSave(5000);
 
         verify(roundRepository, never()).saveRound(any());
-        verify(roundRepository).saveTickets(anyList());
+        verify(lottoTicketRepository).saveTickets(anyList());
     }
 
     @Test
@@ -100,7 +101,7 @@ class TicketApplicationServiceImplTest {
             List<LottoTicket> list = invocation.getArgument(0);
             captureTickets.addAll(list);
             return null;
-        }).when(roundRepository).saveTickets(anyList());
+        }).when(lottoTicketRepository).saveTickets(anyList());
 
         service.buyTicketsAndSave(5000);
 

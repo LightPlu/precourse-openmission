@@ -1,11 +1,13 @@
-package lotto.application;
+package lotto.application.roundService;
 
-import lotto.application.roundService.RoundResultApplicationServiceImpl;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
+import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.lottoTicket.vo.Lotto;
 import lotto.domain.lottoTicket.vo.LottoNumber;
+import lotto.domain.round.vo.WinningLottoNumbers;
 import lotto.domain.vo.Rank;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +21,14 @@ import static org.mockito.Mockito.*;
 class RoundResultApplicationServiceImplTest {
 
     private RoundRepository roundRepository;
+    private LottoTicketRepository lottoTicketRepository;
     private RoundResultApplicationServiceImpl service;
 
     @BeforeEach
     void setUp() {
         roundRepository = mock(RoundRepository.class);
-        service = new RoundResultApplicationServiceImpl(roundRepository);
+        lottoTicketRepository = mock(LottoTicketRepository.class);
+        service = new RoundResultApplicationServiceImpl(lottoTicketRepository, roundRepository);
     }
 
     private Map<Rank, Integer> sampleRankResults() {
@@ -38,16 +42,33 @@ class RoundResultApplicationServiceImplTest {
         return map;
     }
 
-    private RoundResult sampleRoundResult() {
-        return RoundResult.of(0, 1, sampleRankResults());
+    private Round sampleRoundWithResult() {
+        Round round = new Round(1, 1);
+
+        WinningLottoNumbers winning = WinningLottoNumbers.of(
+                1,
+                List.of(
+                        LottoNumber.of(1), LottoNumber.of(2), LottoNumber.of(3),
+                        LottoNumber.of(4), LottoNumber.of(5), LottoNumber.of(6)
+                ),
+                LottoNumber.of(7),
+                1
+        );
+        round.registerWinningNumbers(winning);
+
+        RoundResult result = RoundResult.of(0, 1, sampleRankResults());
+        round.registerRoundResult(result);
+
+        return round;
     }
+
 
     @Test
     @DisplayName("getRoundResult() → RoundResult.toMap() 반환")
     void getRoundResult_success() {
 
-        when(roundRepository.findRoundResultByRoundId(1))
-                .thenReturn(Optional.of(sampleRoundResult()));
+        when(roundRepository.findByRoundId(1))
+                .thenReturn(Optional.of(sampleRoundWithResult()));
 
         Map<String, Integer> result = service.getRoundResult(1);
 
@@ -61,13 +82,14 @@ class RoundResultApplicationServiceImplTest {
 
         assertThat(result).containsExactlyEntriesOf(expectedResult);
 
-        verify(roundRepository).findRoundResultByRoundId(1);
+        verify(roundRepository).findByRoundId(1);
     }
 
     @Test
     @DisplayName("getRoundResult() → 라운드 결과가 없으면 예외 발생")
     void getRoundResult_fail_notFinished() {
-        when(roundRepository.findRoundResultByRoundId(1))
+
+        when(roundRepository.findByRoundId(1))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.getRoundResult(1))
@@ -77,8 +99,8 @@ class RoundResultApplicationServiceImplTest {
     @Test
     @DisplayName("calculateWinningPrize() → 당첨 금액 계산 성공")
     void calculateWinningPrize_success() {
-        when(roundRepository.findRoundResultByRoundId(1))
-                .thenReturn(Optional.of(sampleRoundResult()));
+        when(roundRepository.findByRoundId(1))
+                .thenReturn(Optional.of(sampleRoundWithResult()));
 
         Map<String, Long> result = service.calculateWinningPrize(1);
 
@@ -89,14 +111,16 @@ class RoundResultApplicationServiceImplTest {
                         Rank.SECOND.getPrize() * 2L +
                         Rank.THIRD.getPrize() * 3L +
                         Rank.FOURTH.getPrize() * 4L +
-                        Rank.FIFTH.getPrize() * 5L +
-                        0L
+                        Rank.FIFTH.getPrize() * 5L
         );
+
+        verify(roundRepository).findByRoundId(1);
     }
 
     @Test
     @DisplayName("calculateLottoSize() → 모든 티켓의 Lotto 개수를 합산한다")
     void calculateLottoSize_success() {
+
         Lotto lottoA = Lotto.of(List.of(
                 LottoNumber.of(1), LottoNumber.of(2), LottoNumber.of(3),
                 LottoNumber.of(4), LottoNumber.of(5), LottoNumber.of(6)
@@ -110,13 +134,12 @@ class RoundResultApplicationServiceImplTest {
         LottoTicket ticket1 = LottoTicket.of(1, List.of(lottoA, lottoB));
         LottoTicket ticket2 = LottoTicket.of(1, List.of(lottoA));
 
-        when(roundRepository.findTicketsByRoundId(1))
+        when(lottoTicketRepository.findTicketsByRoundId(1))
                 .thenReturn(List.of(ticket1, ticket2));
 
         long count = service.calculateLottoSize(1);
 
         assertThat(count).isEqualTo(3);
-
-        verify(roundRepository).findTicketsByRoundId(1);
+        verify(lottoTicketRepository).findTicketsByRoundId(1);
     }
 }

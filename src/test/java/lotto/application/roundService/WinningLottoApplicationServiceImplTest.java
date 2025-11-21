@@ -1,6 +1,5 @@
-package lotto.application;
+package lotto.application.roundService;
 
-import lotto.application.roundService.WinningLottoApplicationServiceImpl;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.WinningLottoNumbers;
 import lotto.domain.round.repository.RoundRepository;
@@ -20,11 +19,17 @@ class WinningLottoApplicationServiceImplTest {
 
     private RoundRepository roundRepository;
     private WinningLottoApplicationServiceImpl service;
+    private Round baseRound;
 
     @BeforeEach
     void setUp() {
         roundRepository = mock(RoundRepository.class);
         service = new WinningLottoApplicationServiceImpl(roundRepository);
+
+        baseRound = new Round(3, 3);
+
+        when(roundRepository.findLatestRound())
+                .thenReturn(Optional.of(baseRound));
     }
 
     private List<LottoNumber> nums(List<Integer> numbers) {
@@ -39,7 +44,8 @@ class WinningLottoApplicationServiceImplTest {
 
         when(roundRepository.findLatestRound()).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
+        assertThatThrownBy(() ->
+                service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(NO_ROUND.getMessage());
     }
@@ -47,12 +53,20 @@ class WinningLottoApplicationServiceImplTest {
     @Test
     @DisplayName("이미 당첨번호가 등록된 경우 예외 발생")
     void saveWinningNumbers_alreadyRegistered() {
-        Round round = new Round(3, 3);
-        when(roundRepository.findLatestRound()).thenReturn(Optional.of(round));
-        when(roundRepository.findWinningLottoNumbersByRoundId(3))
-                .thenReturn(Optional.of(mock(WinningLottoNumbers.class)));
 
-        assertThatThrownBy(() -> service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
+        WinningLottoNumbers winning = WinningLottoNumbers.of(
+                1,
+                nums(List.of(1, 2, 3, 4, 5, 6)),
+                LottoNumber.of(7),
+                3
+        );
+        baseRound.registerWinningNumbers(winning);
+
+        when(roundRepository.findByRoundId(3))
+                .thenReturn(Optional.of(baseRound));
+
+        assertThatThrownBy(() ->
+                service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(REGISTERED_WINNING_NUMBERS.getMessage());
     }
@@ -60,10 +74,8 @@ class WinningLottoApplicationServiceImplTest {
     @Test
     @DisplayName("당첨번호와 보너스 번호를 정상 저장한다")
     void saveWinningNumbers_success() {
-        // given
-        Round round = new Round(5, 5);
-        when(roundRepository.findLatestRound()).thenReturn(Optional.of(round));
-        when(roundRepository.findWinningLottoNumbersByRoundId(5)).thenReturn(Optional.empty());
+
+        when(roundRepository.findByRoundId(3)).thenReturn(Optional.empty());
 
         service.saveWinningNumbers(List.of(1, 2, 3, 4, 5, 6), 7);
 
@@ -73,8 +85,8 @@ class WinningLottoApplicationServiceImplTest {
     @Test
     @DisplayName("getWinningNumbers는 해당 회차 당첨 정보가 없으면 예외 발생")
     void getWinningNumbers_notFound() {
-        when(roundRepository.findWinningLottoNumbersByRoundId(10))
-                .thenReturn(Optional.empty());
+
+        when(roundRepository.findByRoundId(10)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.getWinningNumbers(10))
                 .isInstanceOf(IllegalStateException.class)
@@ -82,22 +94,24 @@ class WinningLottoApplicationServiceImplTest {
     }
 
     @Test
-    @DisplayName("getWinningNumbers는 형식에 맞는 문자열을 반환")
+    @DisplayName("getWinningNumbers는 형식에 맞는 문자열을 반환한다")
     void getWinningNumbers_success() {
+
         WinningLottoNumbers w = WinningLottoNumbers.of(
-                0,
+                11,
                 nums(List.of(1, 2, 3, 4, 5, 6)),
                 LottoNumber.of(10),
                 7
         );
 
-        when(roundRepository.findWinningLottoNumbersByRoundId(7))
-                .thenReturn(Optional.of(w));
+        Round r = new Round(7, 7);
+        r.registerWinningNumbers(w);
+
+        when(roundRepository.findByRoundId(7)).thenReturn(Optional.of(r));
 
         String result = service.getWinningNumbers(7);
 
-        assertThat(result).isEqualTo(
-                "당첨번호 : 1,2,3,4,5,6 | 보너스 번호 : 10"
-        );
+        assertThat(result)
+                .isEqualTo("당첨번호 : 1,2,3,4,5,6 | 보너스 번호 : 10");
     }
 }

@@ -1,4 +1,4 @@
-package lotto.application;
+package lotto.application.roundService;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import lotto.application.roundService.RoundApplicationServiceImpl;
 import lotto.domain.lottoTicket.entity.LottoTicket;
+import lotto.domain.lottoTicket.repository.LottoTicketRepository;
 import lotto.domain.round.entity.Round;
 import lotto.domain.round.vo.WinningLottoNumbers;
+import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.repository.RoundRepository;
 import lotto.domain.service.LottoCompareService;
 import lotto.domain.lottoTicket.vo.Lotto;
@@ -23,13 +24,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-
 class RoundApplicationServiceImplTest {
 
-    @Mock
     RoundRepository roundRepository;
+    LottoTicketRepository lottoTicketRepository;
 
-    @Mock
     LottoCompareService compareService;
 
     @InjectMocks
@@ -37,18 +36,22 @@ class RoundApplicationServiceImplTest {
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
+        roundRepository = mock(RoundRepository.class);
+        lottoTicketRepository = mock(LottoTicketRepository.class);
+        compareService = mock(LottoCompareService.class);
+        service = new RoundApplicationServiceImpl(lottoTicketRepository, roundRepository, compareService);
     }
 
     @Test
     @DisplayName("getLatestRound()는 최신 라운드의 ID를 반환한다")
     void getLatestRound_success() {
         when(roundRepository.findLatestRound())
-                .thenReturn(Optional.of(new Round(5, 3)));  // id=5, roundNumber=3
+                .thenReturn(Optional.of(new Round(5, 3)));
 
         int id = service.getLatestRound();
 
         assertThat(id).isEqualTo(5);
+        verify(roundRepository).findLatestRound();
     }
 
     @Test
@@ -62,13 +65,13 @@ class RoundApplicationServiceImplTest {
     }
 
     @Test
-    @DisplayName("startNewRound()는 기존 라운드가 있을 경우 +1 한 번호로 신규 라운드를 생성한다")
+    @DisplayName("startNewRound(): 기존 라운드가 있을 경우 다음 번호로 생성")
     void startNewRound_existingRound() {
         when(roundRepository.findLatestRound())
-                .thenReturn(Optional.of(new Round(3, 3))); // current roundNumber = 3
+                .thenReturn(Optional.of(new Round(3, 3)));
 
-        Round newRound = new Round(4, 4);
-        when(roundRepository.saveRound(any())).thenReturn(newRound);
+        Round saved = new Round(4, 4);
+        when(roundRepository.saveRound(any())).thenReturn(saved);
 
         Round result = service.startNewRound();
 
@@ -77,7 +80,7 @@ class RoundApplicationServiceImplTest {
     }
 
     @Test
-    @DisplayName("startNewRound()는 라운드가 없다면 1회차로 시작한다")
+    @DisplayName("startNewRound(): 첫 번째 라운드 생성")
     void startNewRound_firstRound() {
         when(roundRepository.findLatestRound())
                 .thenReturn(Optional.empty());
@@ -91,26 +94,27 @@ class RoundApplicationServiceImplTest {
     }
 
     @Test
-    @DisplayName("closeRoundAndStartNextRound(): 정상적으로 결과 저장 후 다음 라운드 시작")
+    @DisplayName("closeRoundAndStartNextRound(): 정상적으로 결과를 저장하고 다음 라운드 시작")
     void closeRoundAndStartNextRound_success() {
 
         int roundId = 10;
-        Round round = new Round(roundId, 5);
 
         when(roundRepository.findLatestRound())
-                .thenReturn(Optional.of(round));
+                .thenReturn(Optional.of(new Round(roundId, 5)));
 
-        LottoTicket ticket = LottoTicket.of(roundId, List.of(
-                Lotto.of(List.of(
+        LottoTicket ticket = LottoTicket.of(
+                roundId,
+                List.of(Lotto.of(List.of(
                         LottoNumber.of(1), LottoNumber.of(2), LottoNumber.of(3),
                         LottoNumber.of(4), LottoNumber.of(5), LottoNumber.of(6)
-                ))
-        ));
-        when(roundRepository.findTicketsByRoundId(roundId))
+                )))
+        );
+        when(lottoTicketRepository.findTicketsByRoundId(roundId))
                 .thenReturn(List.of(ticket));
 
+        Round loaded = new Round(roundId, 5);
         WinningLottoNumbers winning = WinningLottoNumbers.of(
-                0,
+                99,
                 List.of(
                         LottoNumber.of(1), LottoNumber.of(2), LottoNumber.of(3),
                         LottoNumber.of(4), LottoNumber.of(5), LottoNumber.of(6)
@@ -118,8 +122,10 @@ class RoundApplicationServiceImplTest {
                 LottoNumber.of(7),
                 roundId
         );
-        when(roundRepository.findWinningLottoNumbersByRoundId(roundId))
-                .thenReturn(Optional.of(winning));
+        loaded.registerWinningNumbers(winning);
+
+        when(roundRepository.findByRoundId(roundId))
+                .thenReturn(Optional.of(loaded));
 
         when(compareService.compareTicket(any(), any()))
                 .thenReturn(Map.of(Rank.FIRST, 1));
@@ -129,18 +135,18 @@ class RoundApplicationServiceImplTest {
 
         service.closeRoundAndStartNextRound();
 
-        verify(roundRepository).saveRoundResult(any());
+        verify(roundRepository).saveRoundResult(any(RoundResult.class));
         verify(roundRepository).saveRound(any());
     }
 
     @Test
-    @DisplayName("closeRoundAndStartNextRound(): 티켓이 없다면 예외 발생")
+    @DisplayName("closeRoundAndStartNextRound(): 티켓이 없으면 예외 발생")
     void closeRoundAndStartNextRound_noTickets() {
 
         when(roundRepository.findLatestRound())
                 .thenReturn(Optional.of(new Round(10, 3)));
 
-        when(roundRepository.findTicketsByRoundId(10))
+        when(lottoTicketRepository.findTicketsByRoundId(10))
                 .thenReturn(List.of());
 
         assertThatThrownBy(() -> service.closeRoundAndStartNextRound())
@@ -152,23 +158,29 @@ class RoundApplicationServiceImplTest {
     @DisplayName("closeRoundAndStartNextRound(): 당첨 번호 미등록이면 예외 발생")
     void closeRoundAndStartNextRound_noWinningNumbers() {
 
-        when(roundRepository.findLatestRound())
-                .thenReturn(Optional.of(new Round(10, 3)));
+        int roundId = 10;
 
-        LottoTicket ticket = LottoTicket.of(10, List.of(
-                Lotto.of(List.of(
+        when(roundRepository.findLatestRound())
+                .thenReturn(Optional.of(new Round(roundId, 3)));
+
+        LottoTicket ticket = LottoTicket.of(
+                roundId,
+                List.of(Lotto.of(List.of(
                         LottoNumber.of(1), LottoNumber.of(2), LottoNumber.of(3),
                         LottoNumber.of(4), LottoNumber.of(5), LottoNumber.of(6)
-                ))
-        ));
-        when(roundRepository.findTicketsByRoundId(10))
+                )))
+        );
+        when(lottoTicketRepository.findTicketsByRoundId(roundId))
                 .thenReturn(List.of(ticket));
 
-        when(roundRepository.findWinningLottoNumbersByRoundId(10))
-                .thenReturn(Optional.empty());
+        Round loaded = new Round(roundId, 3);
+
+        when(roundRepository.findByRoundId(roundId))
+                .thenReturn(Optional.of(loaded));
 
         assertThatThrownBy(() -> service.closeRoundAndStartNextRound())
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(NOT_REGISTERED_WINNING_NUMBERS.getMessage());
     }
+
 }
