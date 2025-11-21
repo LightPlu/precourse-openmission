@@ -13,15 +13,13 @@ public interface RoundRepository {
 
     Optional<Round> findByRoundNumber(int roundNumber);
 
+    Optional<Round> findByRoundId(int roundId);
+
     Round saveRound(Round round);
 
     void saveWinningLottoNumbers(WinningLottoNumbers winningNumbers);
 
-    Optional<WinningLottoNumbers> findWinningLottoNumbersByRoundId(int roundId);
-
     void saveRoundResult(RoundResult result);
-
-    Optional<RoundResult> findRoundResultByRoundId(int roundId);
 
     List<Integer> findAllRoundNumbers();
 }
