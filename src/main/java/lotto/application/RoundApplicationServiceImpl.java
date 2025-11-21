@@ -51,16 +51,18 @@ public class RoundApplicationServiceImpl implements RoundApplicationService {
     @Override
     public void closeRoundAndStartNextRound() {
         int roundId = getValidRoundIdWithTickets();
-
-        WinningLottoNumbers winning = roundRepository.findWinningLottoNumbersByRoundId(roundId)
+        Round round = roundRepository.findByRoundId(roundId)
                 .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
 
-        RoundResult result = RoundResult.of(
+        if(round.getWinningLottoNumbers() == null) {
+            throw new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage());
+        }
+
+        roundRepository.saveRoundResult(RoundResult.of(
                 0,
                 roundId,
-                aggregateRankCounts(lottoTicketRepository.findTicketsByRoundId(roundId), winning)
-        );
-        roundRepository.saveRoundResult(result);
+                aggregateRankCounts(lottoTicketRepository.findTicketsByRoundId(roundId), round.getWinningLottoNumbers())
+        ));
         startNewRound();
     }
 
