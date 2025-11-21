@@ -25,9 +25,8 @@ public class WinningLottoApplicationServiceImpl implements WinningLottoApplicati
         Round round = roundRepository.findLatestRound()
                 .orElseThrow(() -> new IllegalStateException(NO_ROUND.getMessage()));
 
-        int roundId = round.getId();
 
-        if (roundRepository.findWinningLottoNumbersByRoundId(roundId).isPresent()) {
+        if (round.getWinningLottoNumbers() != null) {
             throw new IllegalStateException(REGISTERED_WINNING_NUMBERS.getMessage());
         }
 
@@ -37,20 +36,20 @@ public class WinningLottoApplicationServiceImpl implements WinningLottoApplicati
 
         LottoNumber bonusNumber = LottoNumber.of(bonus);
 
-        WinningLottoNumbers winning = WinningLottoNumbers.of(
+        roundRepository.saveWinningLottoNumbers(WinningLottoNumbers.of(
                 0,
                 winningNumbers,
                 bonusNumber,
-                roundId
-        );
-
-        roundRepository.saveWinningLottoNumbers(winning);
+                round.getId()
+        ));
     }
 
     @Override
-    public String getWinningNumbers(int roundNumber) {
-        WinningLottoNumbers winningLottoNumbers = roundRepository.findWinningLottoNumbersByRoundId(roundNumber)
+    public String getWinningNumbers(int roundId) {
+        Round round = roundRepository.findByRoundId(roundId)
                 .orElseThrow(() -> new IllegalStateException(NOT_REGISTERED_WINNING_NUMBERS.getMessage()));
+
+        WinningLottoNumbers winningLottoNumbers = round.getWinningLottoNumbers();
 
         return WINNING_NUMBER_MESSAGE_PREFIX + winningLottoNumbers.winningNumbersAsCsv() + BONUS_NUMBER_MESSAGE_PREFIX
                 + winningLottoNumbers.bonusNumberAsCsv();
