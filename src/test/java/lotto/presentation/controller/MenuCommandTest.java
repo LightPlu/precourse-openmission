@@ -1,4 +1,4 @@
-package lotto.controller;
+package lotto.presentation.controller;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

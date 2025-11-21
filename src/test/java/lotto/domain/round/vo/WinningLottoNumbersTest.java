@@ -1,4 +1,4 @@
-package lotto.domain.entity;
+package lotto.domain.round.vo;
 
 import lotto.domain.round.vo.WinningLottoNumbers;
 import lotto.domain.lottoTicket.vo.LottoNumber;

@@ -1,4 +1,4 @@
-package lotto.domain.entity;
+package lotto.domain.round.vo;
 
 import java.util.LinkedHashMap;
 import lotto.domain.round.vo.RoundResult;
