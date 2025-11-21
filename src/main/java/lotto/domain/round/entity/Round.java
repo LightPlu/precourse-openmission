@@ -1,5 +1,10 @@
 package lotto.domain.round.entity;
 
+import static lotto.domain.common.DomainErrorMessage.CANT_REGISTER_WITH_NO_WINNING_NUMBER;
+import static lotto.domain.common.DomainErrorMessage.RESULT_REGISTERED;
+import static lotto.domain.common.DomainErrorMessage.ROUND_IS_RUNNING;
+import static lotto.domain.common.DomainErrorMessage.WINNING_NUMBER_REGISTERED;
+
 import java.util.Objects;
 import lotto.domain.round.vo.RoundResult;
 import lotto.domain.round.vo.WinningLottoNumbers;
@@ -31,17 +36,17 @@ public class Round {
 
     public void registerWinningNumbers(WinningLottoNumbers winningNumbers) {
         if (this.winningLottoNumbers != null) {
-            throw new IllegalStateException("이미 당첨 번호가 등록된 Round입니다.");
+            throw new IllegalStateException(WINNING_NUMBER_REGISTERED.getMessage());
         }
         this.winningLottoNumbers = winningNumbers;
     }
 
     public void registerRoundResult(RoundResult result) {
         if (this.winningLottoNumbers == null) {
-            throw new IllegalStateException("당첨 번호 없이 결과를 등록할 수 없습니다.");
+            throw new IllegalStateException(CANT_REGISTER_WITH_NO_WINNING_NUMBER.getMessage());
         }
         if (this.roundResult != null) {
-            throw new IllegalStateException("이미 결과가 등록된 Round입니다.");
+            throw new IllegalStateException(RESULT_REGISTERED.getMessage());
         }
         this.roundResult = result;
     }
@@ -52,7 +57,7 @@ public class Round {
 
     public RoundResult getRoundResult() {
         if (roundResult == null) {
-            throw new IllegalStateException("아직 종료되지 않은 회차입니다.");
+            throw new IllegalStateException(ROUND_IS_RUNNING.getMessage());
         }
         return roundResult;
     }
