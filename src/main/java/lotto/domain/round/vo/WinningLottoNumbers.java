@@ -23,7 +23,7 @@ public class WinningLottoNumbers {
         validateWinningNumbersRange(winningNumbers);
         validateWinningAndBonusDuplicate(winningNumbers, bonusNumber);
         this.id = id;
-        this.winningNumbers = winningNumbers;
+        this.winningNumbers = List.copyOf(winningNumbers);
         this.bonusNumber = bonusNumber;
         this.roundId = roundId;
     }
