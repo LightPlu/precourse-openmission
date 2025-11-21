@@ -1,5 +1,7 @@
 package lotto.presentation.controller;
 
+import static lotto.application.common.ServiceErrorMessage.NOT_FINISHED_ROUND;
+
 import java.util.List;
 import java.util.Map;
 import lotto.application.RoundApplicationService;
@@ -84,20 +86,20 @@ public class LottoController {
         if (roundNumber == 0) {
             return;
         }
-        int round = roundService.findRoundIdByRoundNumber(roundNumber);
+        int roundId = roundService.findRoundIdByRoundNumber(roundNumber);
         try {
-            aggregateMethod(round);
+            aggregateMethod(roundId);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void aggregateMethod(int round) {
-        Map<String, Integer> result = resultService.getRoundResult(round);
-        Map<String, Long> prizeResult = resultService.calculateWinningPrize(round);
-        long lottoNumber = resultService.calculateLottoSize(round);
-        String winningNumbers = winningService.getWinningNumbers(round);
-        userOutputView.printRoundResult(round, result, prizeResult, lottoNumber, winningNumbers);
+    private void aggregateMethod(int roundId) {
+        Map<String, Integer> result = resultService.getRoundResult(roundId);
+        Map<String, Long> prizeResult = resultService.calculateWinningPrize(roundId);
+        long lottoNumber = resultService.calculateLottoSize(roundId);
+        String winningNumbers = winningService.getWinningNumbers(roundId);
+        userOutputView.printRoundResult(roundId, result, prizeResult, lottoNumber, winningNumbers);
     }
 
     public void stop() {
