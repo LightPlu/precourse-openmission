@@ -59,7 +59,7 @@ class RoundTest {
 
         assertThatThrownBy(() -> round.registerWinningNumbers(winning))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("이미 당첨 번호가 등록된 Round입니다.");
+                .hasMessageContaining("이미 당첨 번호가 등록된 회차입니다.");
     }
 
     @Test
@@ -94,7 +94,7 @@ class RoundTest {
 
         assertThatThrownBy(() -> round.registerRoundResult(sampleResult(1)))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("이미 결과가 등록된 Round입니다.");
+                .hasMessageContaining("이미 결과가 등록된 회차입니다.");
     }
 
     @Test
