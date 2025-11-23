@@ -6,15 +6,15 @@
 ---
 
 ## 디렉토리 구조 및 아키텍처 설명
-### [디렉토리 구조](https://github.com/LightPlu/precourse-openmission/blob/LightPlu/DIRECTORY_STRUCTURE.md)
-### [아키텍처 설명](https://github.com/LightPlu/precourse-openmission/blob/LightPlu/ARCHITECTURE_DESCRIPTION.md)
+### [디렉토리 구조](https://github.com/LightPlu/precourse-openmission/DIRECTORY_STRUCTURE.md)
+### [아키텍처 설명](https://github.com/LightPlu/precourse-openmission/ARCHITECTURE_DESCRIPTION.md)
 
 ---
 
 ## 리팩토링 시작 전 설계 및 리팩토링 과정에서 생긴 의문점
 
-### [시작 전 설계](https://github.com/LightPlu/precourse-openmission/blob/LightPlu/BEFORE_REFACTORING.md)
-### [의문점 및 해결](https://github.com/LightPlu/precourse-openmission/blob/LightPlu/REFACTORING_QUESTION.md)
+### [시작 전 설계](https://github.com/LightPlu/precourse-openmission/BEFORE_REFACTORING.md)
+### [의문점 및 해결](https://github.com/LightPlu/precourse-openmission/REFACTORING_QUESTION.md)
 
 ---
 
